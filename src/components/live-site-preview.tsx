@@ -130,7 +130,7 @@ export function LiveSitePreview() {
                       </div>
                       <div className="w-full h-1 bg-gray-200 dark:bg-[#1a202c] rounded-full overflow-hidden">
                         <motion.div
-                          className="h-full bg-[#FF8A3D]"
+                          className="h-full bg-text-primary"
                           initial={{ width: "0%" }}
                           animate={{ width: `${loadingProgress}%` }}
                           transition={{ duration: 0.2 }}
@@ -148,7 +148,7 @@ export function LiveSitePreview() {
                 href={site.originalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 bg-bg-raised border border-border-hairline hover:border-[#FF8A3D] text-xs font-mono px-3.5 py-2 rounded-full text-text-muted hover:text-text-primary transition-all shadow-xl"
+                className="flex items-center gap-1.5 bg-bg-raised border border-border-hairline hover:border-text-primary text-xs font-mono px-3.5 py-2 rounded-full text-text-muted hover:text-text-primary transition-all shadow-xl"
               >
                 Open Live
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -169,7 +169,7 @@ export function LiveSitePreview() {
             onClick={() => setActive(i)}
             className={`font-mono text-[11px] uppercase tracking-wider px-4 py-2 rounded-full border transition-all cursor-pointer ${
               i === active
-                ? "border-[#FF8A3D] text-[#FF8A3D] bg-[#FF8A3D]/10 font-bold"
+                ? "border-text-primary text-text-primary bg-text-primary/10 font-bold"
                 : "border-border-hairline text-text-muted hover:text-text-primary hover:border-text-muted"
             }`}
           >

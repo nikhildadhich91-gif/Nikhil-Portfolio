@@ -12,16 +12,16 @@ const PROJECT_PREVIEWS: Record<string, string> = {
   "bitwise-consulting": "/bitwise-preview.webp",
   "retailos": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
   "agency-os": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
-  "pixeelnest": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&auto=format&fit=crop&q=80",
-  "shadway": "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=800&auto=format&fit=crop&q=80",
+  "kanban-board": "https://images.unsplash.com/photo-1611224885990-ab7363d1f2a9?w=800&auto=format&fit=crop&q=80",
+  "omni-keys": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&auto=format&fit=crop&q=80",
 };
 
 // Map slugs to live links (if they are live)
 const LIVE_LINKS: Record<string, string> = {
   "bitwise-consulting": "https://bitwise-ag.vercel.app/",
   "retailos": "#",
-  "pixeelnest": "#",
-  "shadway": "#",
+  "kanban-board": "https://kanban-for-startup.vercel.app/",
+  "omni-keys": "https://github.com/nikhildadhich91-gif/Omni-key",
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -164,7 +164,7 @@ export function ProjectSlider() {
                     href={LIVE_LINKS[activeProject.slug]}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 bg-[#FF8A3D] text-[#0A0E12] px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full hover:opacity-90 transition-opacity shadow-md"
+                    className="flex items-center gap-1.5 bg-text-primary text-bg-base px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full hover:opacity-90 transition-opacity shadow-md"
                   >
                     Live Demo
                     <ExternalLink className="w-3 h-3" />
@@ -180,7 +180,7 @@ export function ProjectSlider() {
       <div className="flex items-center gap-6">
         <button
           onClick={handlePrev}
-          className="size-11 rounded-full border border-border-hairline bg-bg-raised/40 hover:bg-bg-raised hover:text-[#FF8A3D] transition-colors flex items-center justify-center text-text-primary shadow-lg cursor-pointer"
+          className="size-11 rounded-full border border-border-hairline bg-bg-raised/40 hover:bg-bg-raised hover:text-text-primary transition-colors flex items-center justify-center text-text-primary shadow-lg cursor-pointer"
           aria-label="Previous project"
         >
           <ArrowLeft className="w-4.5 h-4.5" />
@@ -195,7 +195,7 @@ export function ProjectSlider() {
               className={cn(
                 "h-2 rounded-full transition-all duration-300 cursor-pointer",
                 idx === activeIndex
-                  ? "w-6 bg-[#FF8A3D]"
+                  ? "w-6 bg-text-primary"
                   : "w-2 bg-text-muted/30 hover:bg-text-muted/60"
               )}
               aria-label={`Go to slide ${idx + 1}`}
@@ -205,7 +205,7 @@ export function ProjectSlider() {
 
         <button
           onClick={handleNext}
-          className="size-11 rounded-full border border-border-hairline bg-bg-raised/40 hover:bg-bg-raised hover:text-[#FF8A3D] transition-colors flex items-center justify-center text-text-primary shadow-lg cursor-pointer"
+          className="size-11 rounded-full border border-border-hairline bg-bg-raised/40 hover:bg-bg-raised hover:text-text-primary transition-colors flex items-center justify-center text-text-primary shadow-lg cursor-pointer"
           aria-label="Next project"
         >
           <ArrowRight className="w-4.5 h-4.5" />

@@ -49,27 +49,27 @@ export const PROJECTS_DATA: Project[] = [
     results: "Restructured CSS layouts using vanilla Tailwind and optimized script loaders to prevent main thread blocking, achieving near-perfect metrics across SEO and accessibility audits."
   },
   {
-    slug: "pixeelnest",
-    title: "Pixeelnest",
-    desc: "Modular SaaS subscription scaffolding template with integrated payment hooks and client dashboards.",
+    slug: "kanban-board",
+    title: "Kanban Board for Startups",
+    desc: "Interactive workflow management board designed for fast-paced startup teams to manage their entire workflows.",
     status: "LIVE",
-    tech: ["Next.js", "Stripe API", "PostgreSQL", "Node.js"],
+    tech: ["Next.js", "DnD Kit", "Tailwind CSS", "Firebase"],
     accent: "signal",
-    image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=600&auto=format&fit=crop&q=80",
-    narrative: "Pixeelnest is a developer starter template designed to cut SaaS setup time by offering built-in subscription webhooks and user workspaces.",
-    challenges: "Managing webhooks and synchronizing Stripe billing events with internal user records without data lag.",
-    results: "Built a fully decoupled billing handler middleware that handles subscription upgrades, downgrades, and cancellations instantly, logging errors to a centralized dashboard."
+    image: "https://images.unsplash.com/photo-1611224885990-ab7363d1f2a9?w=600&auto=format&fit=crop&q=80",
+    narrative: "An advanced workflow board built specifically to handle complex task management pipelines for startups with ease and speed.",
+    challenges: "Ensuring butter-smooth drag-and-drop animations while instantly syncing state across collaborative team members.",
+    results: "Implemented a zero-lag dnd system with optimistic UI updates and structured Firestore real-time listeners for instant synchronization."
   },
   {
-    slug: "shadway",
-    title: "Shadway",
-    desc: "WebGL 3D art portfolio showcase utilizing React Three Fiber and customized mesh shader materials.",
-    status: "IN PROGRESS",
-    tech: ["React Three Fiber", "Three.js", "GLSL Shaders", "WebGL"],
+    slug: "omni-keys",
+    title: "Omni Keys",
+    desc: "Lightweight background desktop assistant to instantly optimize, rewrite, translate, or explain text in any application using global hotkeys.",
+    status: "LIVE",
+    tech: ["Tauri v2", "Rust", "React 19", "TypeScript"],
     accent: "ai",
-    image: "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=600&auto=format&fit=crop&q=80",
-    narrative: "Shadway is a WebGL creative playground showcasing how custom GLSL shaders and Three.js physics pipelines can run smoothly on standard mobile browsers.",
-    challenges: "Optimizing 3D rendering calculations and geometry counts to maintain a consistent 60fps on mobile viewports.",
-    results: "Constructed low-poly mesh proxies and programmed procedural noise in GLSL to offload math calculations from the CPU to the GPU, preventing main thread lag."
+    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&auto=format&fit=crop&q=80",
+    narrative: "Omni Keys is a background desktop assistant that intercepts selected text globally across the OS. By pressing a global hotkey, users can run slash commands to trigger AI actions in any active window (editors, browsers, or Slack).",
+    challenges: "Capturing active OS-level text selection and performing clipboard operations reliably across operating systems without native focus issues.",
+    results: "Built a Tauri v2 desktop application in Rust leveraging native OS hooks, securing local API credentials in encrypted storage, and executing Gemini/OpenRouter API calls."
   }
 ];

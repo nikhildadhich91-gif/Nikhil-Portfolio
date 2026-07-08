@@ -21,7 +21,7 @@ export function HowIWorkStack() {
           }}
         >
           <div className="bg-bg-raised border border-border-hairline rounded-2xl p-8 shadow-2xl">
-            <span className="font-mono text-xs text-[#FF8A3D] tracking-wider">
+            <span className="font-mono text-xs text-text-primary tracking-wider">
               {String(index + 1).padStart(2, "0")}
             </span>
             <h3 className="font-display text-2xl text-text-primary mt-2 mb-3 font-bold">

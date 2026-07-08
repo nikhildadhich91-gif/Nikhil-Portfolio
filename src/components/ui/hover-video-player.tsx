@@ -60,7 +60,7 @@ export function HoverVideoPlayer({
       {/* Loading overlay */}
       {isHovered && isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
-          <div className="w-6 h-6 border-2 border-[#FF8A3D] border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-text-primary border-t-transparent rounded-full animate-spin" />
         </div>
       )}
       {/* Actual video element */}

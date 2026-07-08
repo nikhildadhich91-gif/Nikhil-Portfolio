@@ -30,7 +30,7 @@ export function TiltCard({
   className,
   ...props
 }: TiltCardProps) {
-  const accentColor = accent === "ai" ? "#6EE7D8" : "#FF8A3D";
+  const accentColor = accent === "ai" ? "var(--accent-ai)" : "var(--accent-signal)";
   
   const inner = (
     <Tilt

@@ -99,8 +99,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const { scrollY } = useScroll();
 
-  // Scroll cooling color transition (warm orange to cool mint)
-  const glowColor = useTransform(scrollY, [0, 600], ["#FF8A3D", "#6EE7D8"]);
+  // Scroll cooling color transition (monochrome slate to dark gray)
+  const glowColor = useTransform(scrollY, [0, 600], ["#888888", "#333333"]);
 
   // Contact Form State
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -147,7 +147,7 @@ export default function Home() {
         {/* Section 1: Hero & Showcase Live Preview */}
         <section id="home" className="relative w-full max-w-7xl mx-auto px-6 lg:px-16 pt-12 md:pt-20 pb-32 flex flex-col items-center text-center">
           <div className="flex flex-col items-center gap-4 max-w-4xl mx-auto mb-16">
-            <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#FF8A3D] bg-[#FF8A3D]/5 border border-border-hairline px-3.5 py-1.5 rounded-full select-none">
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary bg-text-primary/5 border border-border-hairline px-3.5 py-1.5 rounded-full select-none">
               Nikhil Dadhich — Builder
             </span>
             <HeroHeadline />
@@ -180,24 +180,24 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6 lg:px-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="flex flex-col gap-1.5">
               <span className="text-3xl md:text-5xl font-bold font-display text-text-primary tracking-tight">
-                <NumberTicker value={5615} />
+                <NumberTicker value={8} />
+                <span>+</span>
               </span>
-              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">UNITS TRACKED</span>
+              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">SAAS PRODUCTS BUILT</span>
             </div>
             <div className="flex flex-col gap-1.5 border-y md:border-y-0 md:border-x border-border-hairline py-6 md:py-0">
               <span className="text-3xl md:text-5xl font-bold font-display text-text-primary tracking-tight flex items-center justify-center">
-                <span>₹</span>
-                <NumberTicker value={4.38} decimals={2} />
-                <span>L</span>
+                <NumberTicker value={1} />
+                <span>M+</span>
               </span>
-              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">REVENUE DASHBOARDED</span>
+              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">API CALLS HANDLED</span>
             </div>
             <div className="flex flex-col gap-1.5">
               <span className="text-3xl md:text-5xl font-bold font-display text-text-primary tracking-tight flex items-center justify-center">
-                <NumberTicker value={50} />
-                <span>+</span>
+                <NumberTicker value={99.9} decimals={1} />
+                <span>%</span>
               </span>
-              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">REQUIREMENTS DOCUMENTED</span>
+              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">DEPLOYMENT UPTIME</span>
             </div>
           </div>
         </section>
@@ -227,7 +227,7 @@ export default function Home() {
                     status={proj.status}
                     imageSrc={proj.image}
                     imageAlt={proj.title}
-                    href={`/services/${proj.slug === "bitwise-consulting" ? "software" : proj.slug === "retailos" ? "software" : proj.slug === "agency-os" ? "software" : proj.slug === "pixeelnest" ? "software" : "software"}`}
+                    href={`/services/${proj.slug === "bitwise-consulting" ? "software" : proj.slug === "retailos" ? "software" : proj.slug === "agency-os" ? "software" : proj.slug === "kanban-board" ? "software" : "software"}`}
                     accent={proj.accent}
                   />
                 ))}
@@ -266,7 +266,7 @@ export default function Home() {
                 {/* Core Content */}
                 <div className="flex-1 space-y-4">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-xl md:text-2xl font-bold font-display text-text-primary group-hover:text-[#FF8A3D] dark:group-hover:text-[#6EE7D8] transition-colors">
+                    <h3 className="text-xl md:text-2xl font-bold font-display text-text-primary group-hover:text-text-primary dark:group-hover:text-text-primary transition-colors">
                       {srv.title}
                     </h3>
                   </div>
@@ -307,7 +307,7 @@ export default function Home() {
         <section id="about" className="w-full py-32 bg-bg-raised/10 border-t border-border-hairline">
           <div className="max-w-4xl mx-auto px-6 lg:px-16 text-left">
             <div className="max-w-2xl mb-16 select-none">
-              <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#FF8A3D] mb-3 block">
+              <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary mb-3 block">
                 ABOUT THE BUILDER
               </span>
               <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
@@ -334,10 +334,10 @@ export default function Home() {
                   <div className="space-y-8 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[1px] before:bg-border-hairline">
                     {EXPERIENCE.map((exp, idx) => (
                       <div key={idx} className="relative pl-8 group">
-                        <div className="absolute left-[9px] top-1.5 w-[7px] h-[7px] rounded-full bg-[#FF8A3D] group-hover:scale-125 transition-transform" />
+                        <div className="absolute left-[9px] top-1.5 w-[7px] h-[7px] rounded-full bg-text-primary group-hover:scale-125 transition-transform" />
                         <span className="font-mono text-[10px] text-text-muted">{exp.period}</span>
                         <h4 className="text-base font-bold text-text-primary font-display mt-0.5">{exp.role}</h4>
-                        <h5 className="text-xs text-[#FF8A3D] font-mono">{exp.company}</h5>
+                        <h5 className="text-xs text-text-muted font-mono">{exp.company}</h5>
                         <ul className="list-disc list-outside ml-4 mt-3 text-xs text-text-muted space-y-1.5 leading-relaxed">
                           {exp.details.map((detail, dIdx) => (
                             <li key={dIdx}>{detail}</li>
@@ -392,11 +392,11 @@ export default function Home() {
                   </h4>
                   <ul className="space-y-2 text-[10px] text-text-muted leading-relaxed list-none">
                     <li className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-[#FF8A3D]" />
+                      <span className="w-1 h-1 rounded-full bg-text-primary" />
                       NISM Series VIII – Equity Derivatives
                     </li>
                     <li className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-[#FF8A3D]" />
+                      <span className="w-1 h-1 rounded-full bg-text-primary" />
                       Google Agile Project Management
                     </li>
                   </ul>
@@ -419,7 +419,7 @@ export default function Home() {
         <section id="contact" className="w-full border-t border-border-hairline">
           <div className="max-w-5xl mx-auto px-6 lg:px-16 py-32 text-left">
             <div className="max-w-2xl mb-16 select-none">
-              <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#FF8A3D] mb-3 block">
+              <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary mb-3 block">
                 GET IN TOUCH
               </span>
               <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
@@ -437,14 +437,14 @@ export default function Home() {
                 <div className="space-y-4">
                   <a
                     href="mailto:nikhildadhich91@gmail.com"
-                    className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40 hover:border-[#FF8A3D]/30 hover:bg-bg-raised/80 transition-all group"
+                    className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40 hover:border-text-primary/30 hover:bg-bg-raised/80 transition-all group"
                   >
-                    <div className="p-2.5 rounded-lg bg-bg-base text-[#FF8A3D] border border-border-hairline">
+                    <div className="p-2.5 rounded-lg bg-bg-base text-text-primary border border-border-hairline">
                       <Mail className="w-5 h-5" />
                     </div>
                     <div>
                       <h4 className="text-xs font-mono text-text-muted">EMAIL</h4>
-                      <p className="text-sm font-semibold text-text-primary group-hover:text-[#FF8A3D] dark:group-hover:text-white transition-colors">
+                      <p className="text-sm font-semibold text-text-primary group-hover:text-text-primary dark:group-hover:text-white transition-colors">
                         nikhildadhich91@gmail.com
                       </p>
                     </div>
@@ -454,21 +454,21 @@ export default function Home() {
                     href="https://linkedin.com/in/nikhil-dadhich91"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40 hover:border-[#FF8A3D]/30 hover:bg-bg-raised/80 transition-all group"
+                    className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40 hover:border-text-primary/30 hover:bg-bg-raised/80 transition-all group"
                   >
-                    <div className="p-2.5 rounded-lg bg-bg-base text-[#FF8A3D] border border-border-hairline">
+                    <div className="p-2.5 rounded-lg bg-bg-base text-text-primary border border-border-hairline">
                       <LinkedinIcon className="w-5 h-5" />
                     </div>
                     <div>
                       <h4 className="text-xs font-mono text-text-muted">LINKEDIN</h4>
-                      <p className="text-sm font-semibold text-text-primary group-hover:text-[#FF8A3D] dark:group-hover:text-white transition-colors">
+                      <p className="text-sm font-semibold text-text-primary group-hover:text-text-primary dark:group-hover:text-white transition-colors">
                         linkedin.com/in/nikhil-dadhich91
                       </p>
                     </div>
                   </a>
 
                   <div className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40">
-                    <div className="p-2.5 rounded-lg bg-bg-base text-[#FF8A3D] border border-border-hairline">
+                    <div className="p-2.5 rounded-lg bg-bg-base text-text-primary border border-border-hairline">
                       <MapPin className="w-5 h-5" />
                     </div>
                     <div>
@@ -493,7 +493,7 @@ export default function Home() {
                     </p>
                     <button
                       onClick={() => setSubmitted(false)}
-                      className="font-mono text-[10px] uppercase text-[#FF8A3D] hover:underline"
+                      className="font-mono text-[10px] uppercase text-text-primary hover:underline"
                     >
                       Send another message
                     </button>
@@ -512,7 +512,7 @@ export default function Home() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="e.g. John Doe"
-                          className="w-full bg-bg-base border border-border-hairline focus:border-[#FF8A3D] text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 font-mono"
+                          className="w-full bg-bg-base border border-border-hairline focus:border-text-primary text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 font-mono"
                         />
                       </div>
 
@@ -527,7 +527,7 @@ export default function Home() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="e.g. john@example.com"
-                          className="w-full bg-bg-base border border-border-hairline focus:border-[#FF8A3D] text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 font-mono"
+                          className="w-full bg-bg-base border border-border-hairline focus:border-text-primary text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 font-mono"
                         />
                       </div>
                     </div>
@@ -543,14 +543,14 @@ export default function Home() {
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         placeholder="Describe your project, platform, or specifications..."
-                        className="w-full bg-bg-base border border-border-hairline focus:border-[#FF8A3D] text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 leading-relaxed font-mono"
+                        className="w-full bg-bg-base border border-border-hairline focus:border-text-primary text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 leading-relaxed font-mono"
                       />
                     </div>
 
                     <div className="pt-2 flex justify-start">
                       <MagneticButton
                         type="submit"
-                        className="bg-[#FF8A3D] text-[#0A0E12] font-mono text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl font-bold hover:bg-[#FF8A3D]/95 transition-colors flex items-center justify-center gap-2"
+                        className="bg-text-primary text-bg-base font-mono text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
                       >
                         Transmit Specs
                         <Send className="w-3.5 h-3.5" />

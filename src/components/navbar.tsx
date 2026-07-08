@@ -177,7 +177,7 @@ export function Navbar() {
                       {isHighlighted && (
                         <motion.div
                           layoutId="navHover"
-                          className="absolute inset-0 bg-[#FF8A3D]/15 rounded-full z-0"
+                          className="absolute inset-0 bg-text-primary/10 rounded-full z-0"
                           transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         />
                       )}
@@ -187,7 +187,7 @@ export function Navbar() {
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="ml-2 relative z-10">
                   <Link
                     href="#contact"
-                    className="flex items-center gap-1.5 bg-[#FF8A3D] text-[#0A0E12] px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full whitespace-nowrap hover:opacity-90 transition-opacity shadow-md"
+                    className="flex items-center gap-1.5 bg-text-primary text-bg-base px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full whitespace-nowrap hover:opacity-90 transition-opacity shadow-md"
                   >
                     Let&apos;s Talk
                     <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

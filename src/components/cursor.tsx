@@ -40,7 +40,7 @@ export function SmoothCursor() {
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] h-4 w-4 rounded-full bg-[#FF8A3D] mix-blend-difference hidden md:block"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] h-4 w-4 rounded-full bg-text-primary mix-blend-difference hidden md:block"
       style={{
         x: cursorX,
         y: cursorY,

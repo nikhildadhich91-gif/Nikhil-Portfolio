@@ -24,7 +24,7 @@ export interface ServiceConfig {
 }
 
 export function ServiceTemplate({ config }: { config: ServiceConfig }) {
-  const accentColor = config.accent === "ai" ? "#6EE7D8" : "#FF8A3D";
+  const accentColor = config.accent === "ai" ? "var(--accent-ai)" : "var(--accent-signal)";
 
   return (
     <div className="w-full min-h-screen relative pb-32">
@@ -110,7 +110,7 @@ export function ServiceTemplate({ config }: { config: ServiceConfig }) {
                         {point.title}
                       </h4>
                       {point.metric && (
-                        <span className="font-mono text-[10px] text-[#FF8A3D] bg-[#FF8A3D]/5 border border-[#FF8A3D]/10 px-2 py-0.5 rounded">
+                        <span className="font-mono text-[10px] text-text-primary bg-text-primary/5 border border-border-hairline px-2 py-0.5 rounded">
                           {point.metric}
                         </span>
                       )}
@@ -126,7 +126,7 @@ export function ServiceTemplate({ config }: { config: ServiceConfig }) {
             {/* Direct contact hook */}
             <div className="text-center">
               <a href="/contact" className="block w-full">
-                <MagneticButton className="w-full bg-[#FF8A3D] text-[#0A0E12] font-mono text-xs uppercase tracking-wider py-3.5 rounded-xl font-bold shadow-lg">
+                <MagneticButton className="w-full bg-text-primary text-bg-base font-mono text-xs uppercase tracking-wider py-3.5 rounded-xl font-bold shadow-lg hover:opacity-90 transition-opacity">
                   Let&apos;s Discuss This Service
                 </MagneticButton>
               </a>

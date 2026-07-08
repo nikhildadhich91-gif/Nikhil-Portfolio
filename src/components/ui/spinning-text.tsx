@@ -12,7 +12,7 @@ export function SpinningText({ text = "loading • the • work • loading •"
             d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
           />
         </defs>
-        <text className="fill-[#FF8A3D] font-mono text-[7px] uppercase tracking-[0.16em] font-bold">
+        <text className="fill-text-primary font-mono text-[7px] uppercase tracking-[0.16em] font-bold">
           <textPath href="#circlePath" startOffset="0%">
             {text}
           </textPath>

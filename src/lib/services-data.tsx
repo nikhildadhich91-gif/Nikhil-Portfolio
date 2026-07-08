@@ -19,7 +19,7 @@ export const SERVICES_DATA: Record<string, ServiceConfig> = {
         <p>
           I am a firm believer that modern software builders should understand the full stack. I don&apos;t stop at mockups; I deploy production containers on Google Cloud, structure document-oriented collections, optimize database triggers, and craft snappy visual interactions using Next.js and Framer Motion.
         </p>
-        <div className="border-l-2 border-[#FF8A3D] pl-4 my-6 py-2 bg-[#12171D]/30 rounded-r-lg pr-4">
+        <div className="border-l-2 border-text-primary pl-4 my-6 py-2 bg-[#12171D]/30 rounded-r-lg pr-4">
           <h4 className="text-white font-bold mb-1">Architecture Philosophy</h4>
           <p className="text-xs">
             Build lightweight, containerized microservices. Keep state handling clean, utilize Serverless runtimes like GCP Cloud Run to eliminate overhead costs, and prioritize immediate deployment.
@@ -44,14 +44,14 @@ export const SERVICES_DATA: Record<string, ServiceConfig> = {
         metric: "100 SCORES"
       },
       {
-        title: "Pixeelnest",
-        details: "A fast, modular SaaS template featuring stripe subscription handling, developer-friendly endpoints, and responsive user dashboards.",
+        title: "Kanban Board for Startups",
+        details: "An interactive workspace board featuring a zero-lag drag-and-drop system, optimistic UI updates, and real-time collaboration.",
         metric: "LIVE"
       },
       {
-        title: "Shadway",
-        details: "Interactive 3D gallery built with React Three Fiber, showcasing custom shader materials, camera-target tracking, and webgl lighting controls.",
-        metric: "WEBGL"
+        title: "Omni Keys",
+        details: "A background AI assistant desktop app built in Rust and React 19, enabling OS-level text actions using global hotkey listeners.",
+        metric: "LIVE"
       }
     ]
   },
