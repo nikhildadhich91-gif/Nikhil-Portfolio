@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { Mail, MapPin, Send } from "lucide-react";
+import { ServicesScrollSection } from "@/components/services-scroll-section";
 import { SpinningText } from "@/components/ui/spinning-text";
 import { HeroHeadline } from "@/components/hero-headline";
 import { LiveSitePreview } from "@/components/live-site-preview";
@@ -10,9 +12,12 @@ import { NumberTicker } from "@/components/ui/number-ticker";
 import { TiltCard } from "@/components/ui/tilt-card";
 import { ProjectSlider } from "@/components/ui/project-slider";
 import { HowIWorkStack } from "@/components/how-i-work-stack";
-import { ScrollVelocityContainer, ScrollVelocityRow } from "@/components/ui/velocity-marquee";
+import CurvedLoop from "@/components/ui/curved-loop";
+import TrueFocus from "@/components/ui/true-focus";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { PROJECTS_DATA } from "@/lib/projects-data";
+
+const Lanyard = dynamic(() => import("@/components/ui/lanyard"), { ssr: false });
 
 const TECH_TAGS = [
   "Google AI Studio",
@@ -145,15 +150,25 @@ export default function Home() {
         className="w-full relative"
       >
         {/* Section 1: Hero & Showcase Live Preview */}
-        <section id="home" className="relative w-full max-w-7xl mx-auto px-6 lg:px-16 pt-12 md:pt-20 pb-32 flex flex-col items-center text-center">
-          <div className="flex flex-col items-center gap-4 max-w-4xl mx-auto mb-16">
-            <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary bg-text-primary/5 border border-border-hairline px-3.5 py-1.5 rounded-full select-none">
-              Nikhil Dadhich — Builder
-            </span>
-            <HeroHeadline />
-            <p className="text-text-muted max-w-2xl text-sm sm:text-base leading-relaxed select-none">
-              I build production software solo, carrying a Business Analyst&apos;s discipline for requirements, documentations, and cost optimizations.
-            </p>
+        <section id="home" className="relative w-full max-w-7xl mx-auto px-6 lg:px-16 pt-12 md:pt-20 pb-32 flex flex-col items-center">
+          {/* Responsive two-column grid on desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 w-full items-center mb-16 text-center lg:text-left relative">
+            {/* Left Column: Headline and Bio */}
+            <div className="lg:col-span-7 flex flex-col items-center lg:items-start gap-4">
+              <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary bg-text-primary/5 border border-border-hairline px-3.5 py-1.5 rounded-full select-none">
+                Nikhil Dadhich — Builder
+              </span>
+              <HeroHeadline />
+              <p className="text-text-muted max-w-2xl text-sm sm:text-base leading-relaxed select-none mt-2">
+                I build production software solo, carrying a Business Analyst&apos;s discipline for requirements, documentations, and cost optimizations.
+              </p>
+            </div>
+
+            {/* Right Column Spacer (leaves area empty for the card to hang over) */}
+            <div className="lg:col-span-5 w-full h-[500px] lg:h-[600px] select-none pointer-events-none" />
+
+            {/* Lanyard overlaying the entire grid container */}
+            <Lanyard />
           </div>
 
           {/* Interactive Safari Preview with Dynamic Glow */}
@@ -236,59 +251,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Section 3: Services Section (Capabilities Details) */}
-        <section id="services" className="w-full max-w-7xl mx-auto px-6 lg:px-16 py-32 flex flex-col items-center border-t border-border-hairline">
-          <div className="text-center max-w-2xl mx-auto mb-20 select-none">
-            <span className="font-mono text-xs uppercase tracking-widest text-text-muted mb-2 block">THE COMPETENCIES</span>
-            <h2 className="text-3xl sm:text-4xl font-display text-text-primary font-bold">Core Engineering Capabilities</h2>
-            <p className="text-text-muted mt-4 text-xs sm:text-sm max-w-md mx-auto">
-              I don&apos;t sell consulting packages; I ship working software. Each service represents an active engineering domain I build in daily.
-            </p>
-          </div>
-
-          {/* Services Listing (consolidated from subpages) */}
-          <div className="flex flex-col border-t border-border-hairline w-full max-w-5xl">
-            {SERVICES_LIST.map((srv) => (
-              <div
-                key={srv.title}
-                className="group border-b border-border-hairline py-10 md:py-16 flex flex-col md:flex-row items-start gap-8 md:gap-16 hover:bg-bg-raised/20 transition-all duration-300 px-4 -mx-4 rounded-xl"
-              >
-                {/* Index Number */}
-                <div className="shrink-0 w-16 select-none">
-                  <span
-                    className="text-4xl md:text-6xl font-light font-display opacity-20 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ color: srv.accent }}
-                  >
-                    {srv.num}
-                  </span>
-                </div>
-
-                {/* Core Content */}
-                <div className="flex-1 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-xl md:text-2xl font-bold font-display text-text-primary group-hover:text-text-primary dark:group-hover:text-text-primary transition-colors">
-                      {srv.title}
-                    </h3>
-                  </div>
-                  <p className="text-text-muted text-xs sm:text-sm leading-relaxed max-w-3xl">
-                    {srv.desc}
-                  </p>
-                  {/* Tech Badges */}
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {srv.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="font-mono text-[9px] uppercase tracking-wider px-2.5 py-1 rounded bg-bg-raised border border-border-hairline text-text-muted"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Section 3: Services Section — 3D Scroll-Pinned List */}
+        <ServicesScrollSection />
 
         {/* Sticky How I Work Section */}
         <section className="w-full py-32 border-t border-border-hairline">
@@ -406,13 +370,43 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Tech Stack Velocity Marquee */}
-        <section className="w-full border-t border-border-hairline bg-bg-raised/10 overflow-hidden">
-          <ScrollVelocityContainer className="font-mono text-2xl tracking-tight text-text-muted/40 md:text-4xl py-12">
-            <ScrollVelocityRow baseVelocity={4} direction={1}>
-              GCP · FIREBASE · CLAUDE CODE · APPIAN · POWER BI · PYTHON · NEXT.JS ·
-            </ScrollVelocityRow>
-          </ScrollVelocityContainer>
+        {/* Tech Stack Curved Marquee Loop */}
+        <section className="w-full border-t border-border-hairline bg-bg-raised/10 py-1 overflow-hidden">
+          <CurvedLoop
+            marqueeText="GCP ✦ FIREBASE ✦ CLAUDE CODE ✦ APPIAN ✦ POWER BI ✦ PYTHON ✦ NEXT.JS ✦"
+            speed={2.2}
+            curveAmount={100}
+            direction="left"
+            interactive={true}
+          />
+        </section>
+
+        {/* Interactive Funnel Section using TrueFocus */}
+        <section className="w-full border-t border-border-hairline bg-bg-raised/20 py-24 select-none">
+          <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary bg-text-primary/5 border border-border-hairline px-3.5 py-1.5 rounded-full select-none">
+              INTERACTIVE MISSION SPEC
+            </span>
+            <div className="py-8">
+              <TrueFocus
+                sentence="TAP TO FOCUS ON THE OBJECTIVE"
+                manualMode={true}
+                blurAmount={6}
+                borderColor="#ff8a3d"
+                glowColor="rgba(255, 138, 61, 0.6)"
+                animationDuration={0.45}
+                onClick={() => {
+                  const contactSection = document.getElementById("contact");
+                  if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+              />
+            </div>
+            <p className="text-text-muted text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+              Hover over the words to shift visual focus. Click anywhere on the banner to slide down and transmit your project specifications.
+            </p>
+          </div>
         </section>
 
         {/* Section 5: Contact Section (Details & Form) */}

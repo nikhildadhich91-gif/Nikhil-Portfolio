@@ -2,8 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+
+const FluidGlass = dynamic(() => import("@/components/ui/fluid-glass"), { ssr: false });
+import GlassSurface from "@/components/ui/glass-surface";
 
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
@@ -14,6 +18,42 @@ const NAV_LINKS = [
 ];
 
 import { ThemeToggleButton, ThemeToggleOptions, AnimationVariant, AnimationStart } from "@/components/theme-toggle";
+
+function GlassFilter() {
+  return (
+    <svg className="hidden">
+      <defs>
+        <filter
+          id="container-glass"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
+          colorInterpolationFilters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.05 0.05"
+            numOctaves="1"
+            seed="1"
+            result="turbulence"
+          />
+          <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="blurredNoise"
+            scale="40"
+            xChannelSelector="R"
+            yChannelSelector="B"
+            result="displaced"
+          />
+          <feGaussianBlur in="displaced" stdDeviation="1" result="finalBlur" />
+          <feComposite in="finalBlur" in2="SourceGraphic" operator="over" />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -109,6 +149,7 @@ export function Navbar() {
 
   return (
     <>
+      <GlassFilter />
       <motion.nav
         initial={{ y: 0 }}
         animate={{ y: visible ? 0 : -100 }}
@@ -123,6 +164,7 @@ export function Navbar() {
           </Link>
         </motion.div>
 
+        {/* Center: Dynamic Island Morphing Container */}
         <motion.div
           layout
           onMouseEnter={handleMouseEnter}
@@ -132,14 +174,22 @@ export function Navbar() {
             height: isIdle ? 40 : 54,
             paddingLeft: isIdle ? 16 : 8,
             paddingRight: isIdle ? 16 : 8,
-            borderColor: isIdle ? "var(--border-hairline)" : "var(--border-hairline)",
-            backgroundColor: isIdle ? "var(--bg-base)" : "var(--bg-raised)",
+            borderColor: isIdle
+              ? "var(--border-hairline)"
+              : "var(--border-hairline)",
+            backgroundColor: isIdle
+              ? "var(--bg-raised)"
+              : "var(--bg-raised)",
+            boxShadow: isIdle
+              ? "0 4px 24px -4px rgba(0,0,0,0.18)"
+              : "0 25px 50px -12px rgba(0,0,0,0.25)",
           }}
           transition={{ type: "spring", stiffness: 180, damping: 26, mass: 0.8 }}
-          className="hidden lg:flex items-center border border-border-hairline rounded-full gap-1 shadow-2xl backdrop-blur-md relative overflow-hidden select-none"
+          className="hidden lg:flex items-center border border-border-hairline rounded-full gap-1 relative overflow-hidden select-none"
         >
           <AnimatePresence>
             {isIdle ? (
+              /* Idle — collapsed pill showing active section label */
               <motion.div
                 key="idle-state"
                 initial={{ opacity: 0 }}
@@ -153,15 +203,44 @@ export function Navbar() {
                 </span>
               </motion.div>
             ) : (
+              /* Expanded — full nav links */
               <motion.div
                 key="expanded-state"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.18 }}
                 className="flex flex-row flex-nowrap items-center gap-1 w-full h-full whitespace-nowrap"
               >
                 {NAV_LINKS.map((item, idx) => {
+                  if (item.label === "Contact") {
+                    return (
+                      <motion.div
+                        key={item.label}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="ml-2 shrink-0"
+                      >
+                        <Link
+                          href={item.href}
+                          onMouseEnter={() => setHoveredIdx(idx)}
+                          className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider rounded-full whitespace-nowrap shadow-md transition-opacity hover:opacity-90"
+                          style={{
+                            background: "var(--text-primary)",
+                            color: "var(--bg-base)",
+                            padding: "9px 18px",
+                          }}
+                        >
+                          Contact
+                          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M7 17L17 7" />
+                            <path d="M7 7h10v10" />
+                          </svg>
+                        </Link>
+                      </motion.div>
+                    );
+                  }
+
                   const isHighlighted = currentHighlightIdx === idx;
                   return (
                     <div key={item.label} className="relative">
@@ -177,25 +256,14 @@ export function Navbar() {
                       {isHighlighted && (
                         <motion.div
                           layoutId="navHover"
-                          className="absolute inset-0 bg-text-primary/10 rounded-full z-0"
+                          className="absolute inset-0 rounded-full bg-slate-900/10 dark:bg-white/10 z-0"
+                          style={{ backdropFilter: 'url("#container-glass")' }}
                           transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         />
                       )}
                     </div>
                   );
                 })}
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="ml-2 relative z-10">
-                  <Link
-                    href="#contact"
-                    className="flex items-center gap-1.5 bg-text-primary text-bg-base px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full whitespace-nowrap hover:opacity-90 transition-opacity shadow-md"
-                  >
-                    Let&apos;s Talk
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M7 17L17 7" />
-                      <path d="M7 7h10v10" />
-                    </svg>
-                  </Link>
-                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -254,6 +322,27 @@ export function Navbar() {
           >
             <div className="flex flex-col gap-3">
               {NAV_LINKS.map((link) => {
+                if (link.label === "Contact") {
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center justify-center gap-1.5 px-6 py-[18px] mt-2 text-sm font-bold uppercase tracking-wider rounded-2xl whitespace-nowrap hover:opacity-90 transition-opacity shadow-md text-center"
+                      style={{
+                        background: "var(--text-primary)",
+                        color: "var(--bg-base)",
+                      }}
+                    >
+                      Contact
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </Link>
+                  );
+                }
+
                 const isActive = activeSection === link.href.replace("#", "");
                 return (
                   <Link
@@ -293,6 +382,27 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Floating 3D Fluid Glass Bottom Dock (Desktop Only) */}
+      <div className="hidden lg:block fixed bottom-6 left-1/2 -translate-x-1/2 w-[600px] h-[100px] z-50 pointer-events-none">
+        <FluidGlass
+          mode="bar"
+          barProps={{
+            navItems: [
+              { label: 'Home', link: '#home' },
+              { label: 'Work', link: '#work' },
+              { label: 'Services', link: '#services' },
+              { label: 'About', link: '#about' },
+              { label: 'Contact', link: '#contact' }
+            ],
+            scale: 0.16,
+            thickness: 6,
+            ior: 1.25,
+            chromaticAberration: 0.18,
+            anisotropy: 0.08
+          }}
+        />
+      </div>
     </>
   );
 }
