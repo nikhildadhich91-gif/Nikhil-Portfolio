@@ -46,10 +46,10 @@ export function Footer() {
       ScrollTrigger.create({
         trigger: footer,
         start: "top bottom",
-        toggleActions: "play pause resume reverse",
         onEnter: (self) => {
-          const velocity = self.getVelocity();
-          const variation = Math.min(Math.max(velocity / 12000, -0.75), 0.75);
+          const velocity = Math.abs(self.getVelocity());
+          // Modulate amplitude safely between 1.0 (base bounce) and 1.8 (max scroll velocity bounce)
+          const amplitude = 1.0 + Math.min(velocity / 3000, 0.8);
 
           gsap.fromTo(
             path,
@@ -57,10 +57,14 @@ export function Footer() {
             {
               duration: 2.2,
               attr: { d: PATH_CENTER },
-              ease: `elastic.out(${1.2 + variation}, ${0.8 - variation})`,
+              ease: `elastic.out(${amplitude}, 0.5)`, // Constant period of 0.5 for stable oscillation frequency
               overwrite: "auto",
             }
           );
+        },
+        onLeaveBack: () => {
+          // Silently reset the path to PATH_DOWN when it goes off-screen to prevent snapping on re-entry
+          gsap.set(path, { attr: { d: PATH_DOWN } });
         },
       });
     }, footer);
@@ -141,7 +145,7 @@ export function Footer() {
         </div>
 
         {/* Content Overlay: Let's Build Together Section (with reduced pt-16, pb-4, and copyright row deleted) */}
-        <div className="footer-content max-w-[1400px] mx-auto pt-16 pb-4 px-6 md:px-12">
+        <div className="footer-content max-w-[1400px] mx-auto pt-28 md:pt-16 pb-4 px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             {/* Left Column: Info & Links */}
             <div className="lg:col-span-5 flex flex-col justify-center text-text-primary">

@@ -50,11 +50,14 @@ export default function Lanyard({
   lanyardImage = null,
   lanyardWidth = 1.0
 }: LanyardProps) {
-  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [textures, setTextures] = useState<{ front: string; back: string }>({ front: '', back: '' });
   const [pointerEvents, setPointerEvents] = useState<'none' | 'auto'>('none');
 
   useEffect(() => {
+    setMounted(true);
+    setIsMobile(window.innerWidth < 768);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     setTextures(generateCardTextures());
@@ -85,8 +88,8 @@ export default function Lanyard({
     return () => window.removeEventListener('pointermove', handlePointerMove);
   }, []);
 
-  // Avoid running Three.js logic during server-side render
-  if (typeof window === 'undefined') return null;
+  // Avoid running Three.js logic during server-side render or on mobile screen widths
+  if (typeof window === 'undefined' || !mounted || isMobile) return null;
 
   // Use the programmatically generated textures if no custom images are passed
   const activeFront = frontImage || textures.front || BLANK_PIXEL;

@@ -17,7 +17,7 @@ const SERVICES_LIST = Object.values(SERVICES_DATA).map((s, i) => ({
   title: s.title,
   desc: s.description,
   tech: s.techTags ?? [],
-  accent: s.accent === "signal" ? "#FF6B35" : s.accent === "violet" ? "#8B5CF6" : s.accent === "amber" ? "#F59E0B" : "#64748B",
+  accent: s.accent === "signal" ? "#FF6B35" : s.accent === "ai" ? "#8B5CF6" : "#64748B",
 }));
 
 const itemVariants = {

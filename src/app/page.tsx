@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mail, MapPin, Send } from "lucide-react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail } from "lucide-react";
 import { PROJECTS_DATA } from "../lib/projects-data";
 import { PageLoader } from "@/components/page-loader";
 import { ConceptGallery } from "@/components/ui/concept-gallery";
 import { Footer } from "@/components/ui/footer";
 import { MovingCircle } from "../components/moving-circle";
 import dynamic from "next/dynamic";
+import TrueFocus from "@/components/ui/true-focus";
 
 const Lanyard = dynamic(() => import("@/components/ui/lanyard"), { ssr: false });
 
@@ -114,22 +115,11 @@ const SKILL_CATEGORIES = [
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
 
   // isLoading stays true until PageLoader calls onComplete
   const handleLoaderDone = React.useCallback(() => {
     setIsLoading(false);
   }, []);
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
-      console.log("Transmission received:", formData);
-      setSubmitted(true);
-      setFormData({ name: "", email: "", message: "" });
-    }
-  };
 
   // Map projects data
   const projects: ProjectItem[] = PROJECTS_DATA.map((proj, idx) => ({
@@ -182,13 +172,23 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-[9vw] sm:text-[8vw] lg:text-[clamp(4.5rem,7vw,8.5rem)] font-normal tracking-tighter leading-[0.9] text-text-primary max-w-5xl relative z-[1]"
+              className="text-[11vw] xs:text-[10vw] sm:text-[8vw] lg:text-[clamp(4.5rem,7vw,8.5rem)] font-normal tracking-tighter leading-[0.9] text-text-primary max-w-5xl relative z-[1]"
             >
-              GenAI engineer <br /> & full-stack <span className="text-accent font-accent lowercase tracking-normal italic font-normal">builder</span>
+              <TrueFocus
+                sentence="GenAI engineer|& full-stack builder"
+                separator="|"
+                manualMode={false}
+                specialLoadMode={true}
+                startTrigger={!isLoading}
+                borderColor="var(--color-accent)"
+                glowColor="rgba(255, 107, 0, 0.4)"
+                animationDuration={0.8}
+                blurAmount={16}
+              />
             </motion.h1>
 
             {/* Description & Buttons Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-24 items-center relative z-[2]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-16 md:mt-24 items-center relative z-[2]">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -270,7 +270,7 @@ export default function Home() {
         </section>
 
         {/* Section 2: About */}
-        <section id="about" className="py-32 px-6 md:px-12 bg-bg-raised/40 border-y border-border-hairline relative overflow-x-hidden">
+        <section id="about" className="py-20 md:py-32 px-6 md:px-12 bg-bg-raised/40 border-y border-border-hairline relative overflow-x-hidden">
           {/* Circle anchor: x=150px matches red box center (left edge area);
               top-[170px] places circle center vertically on the About heading */}
           <div
@@ -347,7 +347,7 @@ export default function Home() {
         </section>
 
         {/* Section 3: Works (Projects) */}
-        <section id="projects" className="py-32 px-6 md:px-12 bg-bg-base">
+        <section id="projects" className="py-20 md:py-32 px-6 md:px-12 bg-bg-base">
           <div className="max-w-[1400px] mx-auto">
             {/* Section Header */}
             <div className="flex flex-col items-center text-center mb-24 gap-6">
@@ -435,31 +435,31 @@ export default function Home() {
                       </div>
 
                       {/* Action Links */}
-                      <div className="flex gap-8">
+                      <div className="flex flex-wrap gap-4">
                         {proj.liveUrl && (
                           <motion.a
-                            whileHover={{ scale: 1.1, y: -3 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.03, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
                             href={proj.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
-                            title="Live Site"
+                            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-border-hairline hover:border-accent transition-colors bg-bg-raised text-[10px] font-mono uppercase tracking-widest text-text-muted hover:text-accent"
                           >
-                            <GlobeIcon className="w-5 h-5" />
+                            <GlobeIcon className="w-4 h-4" />
+                            <span>Live Site</span>
                           </motion.a>
                         )}
                         {proj.githubUrl && (
                           <motion.a
-                            whileHover={{ scale: 1.1, y: -3 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.03, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
                             href={proj.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
-                            title="GitHub Source"
+                            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-border-hairline hover:border-accent transition-colors bg-bg-raised text-[10px] font-mono uppercase tracking-widest text-text-muted hover:text-accent"
                           >
-                            <GithubIcon className="w-5 h-5" />
+                            <GithubIcon className="w-4 h-4" />
+                            <span>Source Code</span>
                           </motion.a>
                         )}
                       </div>
@@ -515,7 +515,7 @@ export default function Home() {
         {/* Lower page content wrapper — slides UP and OVER the sticky gallery container */}
         <div className="relative z-20 bg-bg-base border-t border-border-hairline shadow-[0_-20px_50px_rgba(0,0,0,0.12)]">
           {/* Section 4: Journey (Experience) */}
-          <section id="experience" className="py-32 px-6 md:px-12 bg-bg-raised/40 border-b border-border-hairline relative overflow-hidden">
+          <section id="experience" className="py-20 md:py-32 px-6 md:px-12 bg-bg-raised/40 border-b border-border-hairline relative overflow-hidden">
             <div className="max-w-[1400px] mx-auto relative z-10">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-28">
                 <motion.div
@@ -523,8 +523,8 @@ export default function Home() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: !0 }}
                 >
-                  <h2 className="text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
-                    journey <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-6xl lg:text-[clamp(4rem,6vw,7rem)]">so far</span>
+                  <h2 className="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
+                    journey <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)]">so far</span>
                   </h2>
                   <div className="w-16 h-px bg-accent/40 mt-10" />
                 </motion.div>
@@ -542,7 +542,7 @@ export default function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: !0 }}
-                    className="grid grid-cols-1 md:grid-cols-12 gap-6 p-8 border border-border-hairline rounded-[2.5rem] bg-bg-base/80 hover:border-accent transition-colors duration-500 shadow-sm group"
+                    className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 md:p-8 border border-border-hairline rounded-3xl md:rounded-[2.5rem] bg-bg-base/80 hover:border-accent transition-colors duration-500 shadow-sm group"
                   >
                     <div className="md:col-span-3">
                       <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted mb-2">
@@ -577,7 +577,7 @@ export default function Home() {
           </section>
 
           {/* Section 5: Stack (Tech Stack) */}
-          <section id="tech-stack" className="py-32 px-6 md:px-12 bg-bg-base relative overflow-hidden">
+          <section id="tech-stack" className="py-20 md:py-32 px-6 md:px-12 bg-bg-base relative overflow-hidden">
             <div className="max-w-[1400px] mx-auto relative z-10">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-28">
                 <motion.div
@@ -585,8 +585,8 @@ export default function Home() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: !0 }}
                 >
-                  <h2 className="text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
-                    operational <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-6xl lg:text-[clamp(4rem,6vw,7rem)]">stack</span>
+                  <h2 className="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
+                    operational <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)]">stack</span>
                   </h2>
                   <div className="w-16 h-px bg-accent/40 mt-10" />
                 </motion.div>
@@ -597,7 +597,7 @@ export default function Home() {
                   <motion.div
                     key={idx}
                     whileHover={{ y: -5, borderColor: "var(--color-accent)" }}
-                    className="p-8 border border-border-hairline rounded-[2.5rem] bg-bg-raised flex flex-col gap-6 transition-all duration-500 shadow-sm"
+                    className="p-6 md:p-8 border border-border-hairline rounded-3xl md:rounded-[2.5rem] bg-bg-raised flex flex-col gap-6 transition-all duration-500 shadow-sm"
                   >
                     <h3 className="font-display text-xl font-bold border-b border-border-hairline pb-4 text-text-primary">
                       {cat.category}

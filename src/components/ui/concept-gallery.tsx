@@ -141,6 +141,19 @@ export function ConceptGallery() {
           align-content: center;
         }
 
+        @media (max-width: 768px) {
+          .gallery--bento {
+            grid-template-columns: repeat(3, 30vw);
+            grid-template-rows: repeat(4, 15vh);
+            gap: 1vh;
+          }
+          .gallery--final.gallery--bento {
+            grid-template-columns: repeat(3, 100vw);
+            grid-template-rows: repeat(4, 30vh);
+            gap: 0px;
+          }
+        }
+
         /* The final state to Flip into: covers full viewport with 0 gaps */
         .gallery--final.gallery--bento {
           grid-template-columns: repeat(3, 100vw);

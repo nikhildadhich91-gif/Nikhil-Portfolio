@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const FluidGlass = dynamic(() => import("@/components/ui/fluid-glass"), { ssr: false });
-import GlassSurface from "@/components/ui/glass-surface";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -372,22 +371,33 @@ export function Navbar() {
               
               {/* Mobile Theme Controls */}
               <div className="flex items-center gap-3 border-t border-border-hairline pt-4 mt-2">
-                <div
-                  onDoubleClick={() => {
-                    setOpen(false);
-                    setShowOptions(true);
-                  }}
-                  className="cursor-pointer flex items-center gap-3 w-full"
-                  title="Double-click to change transition settings"
-                >
-                  <ThemeToggleButton
-                    variant={variant}
-                    start={start}
-                    blur={blur}
-                    gifUrl={gifUrl}
-                    onClick={() => setOpen(false)}
-                  />
-                  <span className="text-xs font-mono text-text-muted uppercase">Toggle Theme</span>
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                    <ThemeToggleButton
+                      variant={variant}
+                      start={start}
+                      blur={blur}
+                      gifUrl={gifUrl}
+                      onClick={() => setOpen(false)}
+                    />
+                    <span className="text-xs font-mono text-text-muted uppercase">Toggle Theme</span>
+                  </div>
+                  
+                  {/* Settings Gear Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      setShowOptions(true);
+                    }}
+                    className="size-10 cursor-pointer rounded-full border border-border-hairline hover:border-accent flex items-center justify-center text-text-muted hover:text-text-primary transition-colors bg-bg-base/50 active:scale-95 shadow-sm"
+                    title="Change transition settings"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>

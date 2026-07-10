@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import './true-focus.css';
 
@@ -13,6 +13,9 @@ interface TrueFocusProps {
   animationDuration?: number;
   pauseBetweenAnimations?: number;
   onClick?: () => void;
+  specialLoadMode?: boolean;
+  startTrigger?: boolean;
+  onComplete?: () => void;
 }
 
 const TrueFocus: React.FC<TrueFocusProps> = ({
@@ -24,27 +27,56 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
   glowColor = 'rgba(255, 138, 61, 0.6)',
   animationDuration = 0.5,
   pauseBetweenAnimations = 1,
-  onClick
+  onClick,
+  specialLoadMode = false,
+  startTrigger = true,
+  onComplete
 }) => {
   const words = sentence.split(separator);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number | null>(0);
   const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [focusRect, setFocusRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [isFinished, setIsFinished] = useState(false);
 
+  // Auto animation mode (non-special load mode)
   useEffect(() => {
-    if (!manualMode) {
+    if (!manualMode && !specialLoadMode) {
       const interval = setInterval(
         () => {
-          setCurrentIndex(prev => (prev + 1) % words.length);
+          setCurrentIndex(prev => (prev === null ? 0 : (prev + 1) % words.length));
         },
         (animationDuration + pauseBetweenAnimations) * 1000
       );
 
       return () => clearInterval(interval);
     }
-  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length]);
+  }, [manualMode, specialLoadMode, animationDuration, pauseBetweenAnimations, words.length]);
+
+  // Special load animation mode
+  useEffect(() => {
+    if (specialLoadMode) {
+      if (!startTrigger) {
+        // Keep it fully visible and not blurred before loader finishes
+        setCurrentIndex(-1);
+        setIsFinished(true);
+        return;
+      }
+
+      // Loader has finished! Start the focus animation
+      setCurrentIndex(0);
+      setIsFinished(false);
+
+      const timer = setTimeout(() => {
+        setIsFinished(true);
+        setCurrentIndex(-1);
+        if (onComplete) onComplete();
+      }, 2000); // Focus for exactly 2 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [specialLoadMode, startTrigger]);
 
   useEffect(() => {
     if (currentIndex === null || currentIndex === -1) return;
@@ -66,55 +98,79 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
   }, [currentIndex, words.length]);
 
   const handleMouseEnter = (index: number) => {
-    if (manualMode) {
+    if (manualMode && !isFinished) {
       setLastActiveIndex(index);
       setCurrentIndex(index);
     }
   };
 
   const handleMouseLeave = () => {
-    if (manualMode) {
+    if (manualMode && !isFinished) {
       setCurrentIndex(lastActiveIndex ?? 0);
     }
   };
 
   return (
-    <div 
+    <span 
       className="focus-container" 
       ref={containerRef}
       onClick={onClick}
+      style={{ display: 'inline-flex', width: '100%', gap: '0.28em', justifyContent: 'inherit', flexWrap: 'wrap' }}
     >
       {words.map((word, index) => {
         const isActive = index === currentIndex;
+        
+        let wordContent: React.ReactNode = word;
+        if (word.includes("builder")) {
+          // Replace "builder" with styled span
+          const parts = word.split("builder");
+          wordContent = (
+            <>
+              {parts[0]}
+              <span className="text-accent font-accent lowercase tracking-normal italic font-normal">
+                builder
+              </span>
+              {parts[1]}
+            </>
+          );
+        }
+
         return (
-          <span
-            key={index}
-            ref={el => {
-              wordRefs.current[index] = el;
-            }}
-            className={`focus-word ${manualMode ? 'manual' : ''} ${isActive && !manualMode ? 'active' : ''}`}
-            style={{
-              filter: isActive ? 'blur(0px)' : `blur(${blurAmount}px)`,
-              cursor: onClick ? 'pointer' : 'default',
-              transition: `filter ${animationDuration}s ease, color ${animationDuration}s ease`,
-              color: isActive ? 'var(--text-primary)' : 'var(--text-muted)'
-            }}
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {word}
-          </span>
+          <React.Fragment key={index}>
+            <span
+              ref={el => {
+                wordRefs.current[index] = el;
+              }}
+              className={`focus-word ${manualMode ? 'manual' : ''} ${isActive && !manualMode ? 'active' : ''}`}
+              style={{
+                filter: isFinished 
+                  ? 'blur(0px)' 
+                  : (isActive ? 'blur(0px)' : `blur(${blurAmount}px)`),
+                cursor: onClick ? 'pointer' : 'default',
+                transition: `filter ${animationDuration}s ease, color ${animationDuration}s ease`,
+                color: isFinished
+                  ? 'var(--text-primary)'
+                  : (isActive ? 'var(--text-primary)' : 'var(--text-muted)')
+              }}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+            >
+              {wordContent}
+            </span>
+            {/* Insert a line break after the first block on the home page */}
+            {index === 0 && separator === "|" && <div className="w-full h-0" />}
+          </React.Fragment>
         );
       })}
 
-      <motion.div
+      <motion.span
         className="focus-frame"
         animate={{
           x: focusRect.x,
           y: focusRect.y,
           width: focusRect.width,
           height: focusRect.height,
-          opacity: currentIndex >= 0 ? 1 : 0
+          opacity: (currentIndex !== null && currentIndex >= 0 && !isFinished) ? 1 : 0
         }}
         transition={{
           duration: animationDuration
@@ -131,8 +187,8 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
         <span className="corner top-right" style={{ borderColor, filter: `drop-shadow(0px 0px 4px ${glowColor})` }}></span>
         <span className="corner bottom-left" style={{ borderColor, filter: `drop-shadow(0px 0px 4px ${glowColor})` }}></span>
         <span className="corner bottom-right" style={{ borderColor, filter: `drop-shadow(0px 0px 4px ${glowColor})` }}></span>
-      </motion.div>
-    </div>
+      </motion.span>
+    </span>
   );
 };
 

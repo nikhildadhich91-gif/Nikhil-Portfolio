@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, animate } from "framer-motion";
+import CircularText from "./ui/circular-text";
 
 /* ─── Types ─────────────────────────────────────────────────────────────── */
 type BreakpointKey =
@@ -12,15 +13,7 @@ type BreakpointKey =
   | "desktop"
   | "desktop-xl";
 
-interface CircularTextProps {
-  text: string;
-  radius?: number;
-  textClassName?: string;
-  speed?: number;
-  direction?: "normal" | "reverse";
-  className?: string;
-  fontSize?: string;
-}
+
 
 /* ─── Breakpoint configs
  * radius: SVG user units (out of 100-unit viewBox). Text path circumference = 2π×r.
@@ -49,44 +42,7 @@ function getBreakpoint(width: number, height?: number): BreakpointKey {
   return "desktop-xl";
 }
 
-/* ─── Circular spinning SVG text ──────────────────────────────────────────*/
-const CircularText = ({
-  text,
-  radius = 40,
-  textClassName = "",
-  speed = 28,
-  direction = "normal",
-  className = "",
-  fontSize = "5px",
-}: CircularTextProps) => {
-  const pathId = React.useId().replace(/[^a-zA-Z0-9]/g, "");
-  return (
-    <div className={`moving-circle-svg relative flex items-center justify-center ${className}`}>
-      <motion.svg
-        viewBox="0 0 100 100"
-        className="w-full h-full overflow-visible"
-        animate={{ rotate: direction === "normal" ? 360 : -360 }}
-        transition={{ duration: speed, repeat: Infinity, ease: "linear" }}
-        /* Slightly more visible than before */
-        style={{ opacity: 0.42 }}
-      >
-        <path
-          id={pathId}
-          d={`M 50,50 m -${radius},0 a ${radius},${radius} 0 1,1 ${2 * radius},0 a ${radius},${radius} 0 1,1 -${2 * radius},0`}
-          fill="none"
-        />
-        <text
-          style={{ fontSize, fill: "currentColor" }}
-          className={`uppercase tracking-widest ${textClassName}`}
-        >
-          <textPath xlinkHref={`#${pathId}`} startOffset="0%">
-            {text}
-          </textPath>
-        </text>
-      </motion.svg>
-    </div>
-  );
-};
+
 
 /* ─── Get coordinate of element's center RELATIVE to #circle-root ────────
  * The circle uses position:absolute inside #circle-root (a div that starts
@@ -170,7 +126,7 @@ export function MovingCircle() {
     };
   }, [x, y]);
 
-  if (!mounted) return null;
+  if (!mounted || breakpoint === "mobile") return null;
 
   const cfg = BREAKPOINT_CONFIGS[breakpoint];
 
@@ -191,12 +147,9 @@ export function MovingCircle() {
       }}
     >
       <CircularText
-        text="ENGINEERING • AI • AUTOMATION • DESIGN • ENGINEERING • AI • AUTOMATION • DESIGN • "
-        radius={cfg.radius}
-        fontSize={cfg.fontSize}
-        /* font-light = thin, exactly like Ankur's circle */
-        textClassName="font-normal tracking-[0.2em]"
-        speed={28}
+        text="ENGINEERING*AI*AUTOMATION*DESIGN*"
+        spinDuration={20}
+        onHover="speedUp"
         className={cfg.size}
       />
     </motion.div>
