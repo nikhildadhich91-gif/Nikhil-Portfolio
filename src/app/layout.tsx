@@ -21,8 +21,8 @@ const monoFont = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nikhil Dadhich | AI Builder & Full-Stack SaaS Developer",
-  description: "Portfolio of Nikhil Dadhich, a 21-year-old AI Builder and Full-Stack SaaS Developer based in Jaipur, India. Ship real software, not just mockups.",
+  title: "Nikhil Dadhich | GenAI Engineer & Full-Stack Builder",
+  description: "Portfolio of Nikhil Dadhich — GenAI Engineer and Full-Stack Developer based in Jaipur, India. Specializing in agentic workflows, RAG pipelines, LLM integrations, and AI-native SaaS products.",
 };
 
 export default function RootLayout({
@@ -36,19 +36,22 @@ export default function RootLayout({
       className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
     >
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quintessential&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   var savedTheme = localStorage.getItem('theme');
-                  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  if (savedTheme === 'dark') {
                     document.documentElement.classList.add('dark');
                   } else if (savedTheme === 'light') {
                     document.documentElement.classList.remove('dark');
                   } else {
-                    // Default to dark mode if no preference
-                    document.documentElement.classList.add('dark');
+                    // Default to light mode if no preference
+                    document.documentElement.classList.remove('dark');
                   }
                 } catch (e) {}
               })();

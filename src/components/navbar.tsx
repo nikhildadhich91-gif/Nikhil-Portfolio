@@ -10,10 +10,10 @@ const FluidGlass = dynamic(() => import("@/components/ui/fluid-glass"), { ssr: f
 import GlassSurface from "@/components/ui/glass-surface";
 
 const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
+  { label: "Works", href: "#projects" },
+  { label: "Journey", href: "#experience" },
+  { label: "Stack", href: "#tech-stack" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -76,7 +76,7 @@ export function Navbar() {
   // Scroll active section tracking (offset-based calculation)
   useEffect(() => {
     const handleScrollActiveSection = () => {
-      const sections = ["home", "work", "services", "about", "contact"];
+      const sections = ["about", "projects", "experience", "tech-stack", "contact"];
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       let currentSection = "home";
@@ -113,10 +113,22 @@ export function Navbar() {
 
   useEffect(() => {
     setIsIdle(false);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => setIsIdle(true), 2200);
-    return () => {
+    
+    const startIdleTimer = () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setIsIdle(true), 2500); // 2.5 seconds
+    };
+
+    // Listen for loader completion
+    window.addEventListener("loaderComplete", startIdleTimer);
+
+    // Fallback in case loaderComplete is missed or doesn't run
+    const fallbackTimer = setTimeout(startIdleTimer, 3500);
+
+    return () => {
+      window.removeEventListener("loaderComplete", startIdleTimer);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      clearTimeout(fallbackTimer);
     };
   }, []);
 

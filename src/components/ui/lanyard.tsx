@@ -94,8 +94,11 @@ export default function Lanyard({
 
   return (
     <div 
-      className="absolute inset-0 w-full h-full z-40 transition-opacity duration-300 pointer-events-none"
-      style={{ pointerEvents }}
+      className="absolute inset-0 w-full h-full transition-all duration-300 pointer-events-none"
+      style={{ 
+        pointerEvents,
+        zIndex: pointerEvents === 'auto' ? 60 : 30
+      }}
     >
       <Canvas
         camera={{ position: position, fov: fov }}
@@ -259,9 +262,9 @@ function Band({
   };
 
   // Set physics joints connecting fixed point -> segments -> card
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 0.7]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 0.7]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 0.7]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
     [0, 1.5, 0]
@@ -319,18 +322,18 @@ function Band({
 
   return (
     <>
-      <group position={[isMobile ? 0 : 3.2, 4, 0]}>
+      <group position={[isMobile ? 0 : 5.5, 4, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
+        <RigidBody position={[0.35, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
+        <RigidBody position={[0.7, 0, 0]} ref={j2} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
+        <RigidBody position={[1.05, 0, 0]} ref={j3} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[2, 0, 0]} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
+        <RigidBody position={[1.4, 0, 0]} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
             scale={2.25}

@@ -1,562 +1,625 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Mail, MapPin, Send } from "lucide-react";
-import { ServicesScrollSection } from "@/components/services-scroll-section";
-import { SpinningText } from "@/components/ui/spinning-text";
-import { HeroHeadline } from "@/components/hero-headline";
-import { LiveSitePreview } from "@/components/live-site-preview";
-import { NumberTicker } from "@/components/ui/number-ticker";
-import { TiltCard } from "@/components/ui/tilt-card";
-import { ProjectSlider } from "@/components/ui/project-slider";
-import { HowIWorkStack } from "@/components/how-i-work-stack";
-import CurvedLoop from "@/components/ui/curved-loop";
-import TrueFocus from "@/components/ui/true-focus";
-import { MagneticButton } from "@/components/ui/magnetic-button";
-import { PROJECTS_DATA } from "@/lib/projects-data";
+import { PROJECTS_DATA } from "../lib/projects-data";
+import { PageLoader } from "@/components/page-loader";
+import { ConceptGallery } from "@/components/ui/concept-gallery";
+import { Footer } from "@/components/ui/footer";
+import { MovingCircle } from "../components/moving-circle";
+import dynamic from "next/dynamic";
 
 const Lanyard = dynamic(() => import("@/components/ui/lanyard"), { ssr: false });
 
-const TECH_TAGS = [
-  "Google AI Studio",
-  "Claude Code",
-  "Firebase Studio",
-  "GCP Cloud Run",
-  "Python",
-  "SQL",
-  "Appian Low-Code",
-  "Power BI",
-  "Meta Ads Manager"
-];
 
-const EXPERIENCE = [
-  {
-    role: "Business Analyst",
-    company: "Team Classic Window Planet, Jaipur",
-    period: "Aug 2024 – Feb 2026",
-    details: [
-      "Designed detailed workflow maps and gathered product requirements for automation systems.",
-      "Conducted root-cause analysis on escalated service items to fix recurring operational gaps.",
-      "Maintained MIS spreadsheets to report performance and benchmarked competitor features in the home automation market."
-    ]
-  },
-  {
-    role: "Customer Success Associate",
-    company: "Groww Serv Pvt Ltd",
-    period: "Jan 2024 – Aug 2024",
-    details: [
-      "Supported high-volume fintech customers with transaction processes and account onboarding.",
-      "Compiled voice-of-customer insights to help product and growth teams eliminate app friction points."
-    ]
-  }
-];
-
-const SERVICES_LIST = [
-  {
-    num: "01",
-    title: "Software Architecture & Engineering",
-    desc: "Full-stack SaaS product builds, end-to-end. I deploy lightweight serverless container applications on Google Cloud and manage real collections.",
-    tech: ["Next.js", "TypeScript", "Firebase", "GCP Cloud Run", "Python", "SQL"],
-    accent: "var(--accent-signal)",
-  },
-  {
-    num: "02",
-    title: "AI Systems Optimization",
-    desc: "Self-case-studies on API cost controls, prompt configurations (.skill specifications), and automated Docker deployments.",
-    tech: ["Google AI Studio", "Claude Code", "Firebase Studio", "Docker", "CI/CD"],
-    accent: "var(--accent-ai)",
-  },
-  {
-    num: "03",
-    title: "Cinematic Video Editing",
-    desc: "High-retention visual edits designed for focus. Aligning cuts with sound transients and optimizing pacing for social channels.",
-    tech: ["CapCut Pro", "Cine Studio", "Seedance 2.0", "Sound Design"],
-    accent: "var(--accent-signal)",
-  },
-  {
-    num: "04",
-    title: "Generative AI Visual Design",
-    desc: "Capping generative model drift using seed consistency and structural camera rulebooks (single continuous shots, logo integrity).",
-    tech: ["Midjourney v6", "Stable Diffusion XL", "Runway Gen-2", "Prompt Design"],
-    accent: "var(--accent-ai)",
-  },
-];
+// Custom SVG Icons to avoid lucide-react export version mismatches
+const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={props.className}>
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+    <path d="M9 18c-4.51 2-5-2-7-2" />
+  </svg>
+);
 
 const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={props.className}
-  >
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={props.className}>
     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
     <rect x="2" y="9" width="4" height="12" />
     <circle cx="4" cy="4" r="2" />
   </svg>
 );
 
+const GlobeIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={props.className}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+  </svg>
+);
+
+const FileTextIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={props.className}>
+    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+    <path d="M10 9H8" />
+    <path d="M16 13H8" />
+    <path d="M16 17H8" />
+  </svg>
+);
+
+const ArrowUpRightIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={props.className}>
+    <path d="M7 17L17 7" />
+    <path d="M7 7h10v10" />
+  </svg>
+);
+
+// Type definitions
+interface ProjectItem {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  mainPortion: string;
+  tags: string[];
+  liveUrl?: string;
+  githubUrl?: string;
+  imageUrl: string;
+  alt: string;
+}
+
+const EXPERIENCE = [
+  {
+    id: "01",
+    role: "GenAI & Automation Engineer",
+    company: "Team Classic Window Planet",
+    status: "FULL-TIME",
+    period: "Aug 2024 – Feb 2026",
+    description: "Built agentic automation pipelines and AI-powered workflows to streamline home automation operations. Designed RAG-based internal knowledge tools and prompt-engineered GPT integrations for product support. Prototyped intelligent dashboards using Python and LLMs to reduce manual reporting overhead by 60%.",
+    highlights: ["Agentic Pipelines", "RAG Workflows", "LLM Integration"]
+  },
+  {
+    id: "02",
+    role: "Customer Success Associate",
+    company: "Groww Serv Pvt. Ltd.",
+    status: "FULL-TIME",
+    period: "Jan 2024 – Aug 2024",
+    description: "Supported high-volume fintech customers with transaction processes and account onboarding. Leveraged data insights to identify friction patterns and suggested AI-assisted improvements to the product team.",
+    highlights: ["Fintech Operations", "Data-Driven Insights", "Process Automation"]
+  }
+];
+
+const SKILL_CATEGORIES = [
+  {
+    category: "GenAI & Automation",
+    skills: ["LLM Integration (GPT-4, Gemini)", "RAG Pipelines", "Agentic Workflows", "Prompt Engineering", "LangChain / LlamaIndex", "AI API Orchestration"]
+  },
+  {
+    category: "Languages",
+    skills: ["Python", "TypeScript", "JavaScript", "SQL", "Rust", "HTML/CSS"]
+  },
+  {
+    category: "Frameworks & UI",
+    skills: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "Tauri v2"]
+  },
+  {
+    category: "Cloud & Infra",
+    skills: ["GCP Cloud Run", "Firebase Studio", "Docker", "CI/CD (GitHub Actions)", "PostgreSQL", "MongoDB"]
+  },
+  {
+    category: "Dev & Build Tools",
+    skills: ["n8n Automation", "Make (Integromat)", "Zapier", "Appian Low-Code", "Power BI", "Draw.io"]
+  }
+];
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const { scrollY } = useScroll();
-
-  // Scroll cooling color transition (monochrome slate to dark gray)
-  const glowColor = useTransform(scrollY, [0, 600], ["#888888", "#333333"]);
-
-  // Contact Form State
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
+  // isLoading stays true until PageLoader calls onComplete
+  const handleLoaderDone = React.useCallback(() => {
+    setIsLoading(false);
   }, []);
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.name && formData.email && formData.message) {
-      console.log("Form data submitted:", formData);
+      console.log("Transmission received:", formData);
       setSubmitted(true);
       setFormData({ name: "", email: "", message: "" });
     }
   };
 
+  // Map projects data
+  const projects: ProjectItem[] = PROJECTS_DATA.map((proj, idx) => ({
+    id: `0${idx + 1}`,
+    title: proj.title,
+    category: proj.slug === "agency-os" ? "BUSINESS ANALYSIS | CASE STUDY" : "FULL-STACK | SAAS | DEPLOYED",
+    description: proj.desc,
+    mainPortion: proj.results || proj.narrative,
+    tags: proj.tech,
+    liveUrl: proj.slug === "agency-os" ? undefined : `https://${proj.slug}.vercel.app/`,
+    githubUrl: proj.slug === "agency-os" ? undefined : `https://github.com/nikhildadhich91-gif/${proj.slug}`,
+    imageUrl: proj.image,
+    alt: `${proj.title} - ${proj.desc}`
+  }));
+
   return (
     <>
-      <AnimatePresence mode="wait">
-        {isLoading && (
-          <motion.div
-            key="loader"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-bg-base"
-          >
-            <SpinningText text="loading • the • work • loading •" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Vertical staggered strip page loader */}
+      {isLoading && <PageLoader onComplete={handleLoaderDone} />}
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoading ? 0 : 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="w-full relative"
+      <div
+        id="circle-root"
+        className="w-full bg-bg-base text-text-primary relative"
       >
-        {/* Section 1: Hero & Showcase Live Preview */}
-        <section id="home" className="relative w-full max-w-7xl mx-auto px-6 lg:px-16 pt-12 md:pt-20 pb-32 flex flex-col items-center">
-          {/* Responsive two-column grid on desktop */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 w-full items-center mb-16 text-center lg:text-left relative">
-            {/* Left Column: Headline and Bio */}
-            <div className="lg:col-span-7 flex flex-col items-center lg:items-start gap-4">
-              <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary bg-text-primary/5 border border-border-hairline px-3.5 py-1.5 rounded-full select-none">
-                Nikhil Dadhich — Builder
-              </span>
-              <HeroHeadline />
-              <p className="text-text-muted max-w-2xl text-sm sm:text-base leading-relaxed select-none mt-2">
-                I build production software solo, carrying a Business Analyst&apos;s discipline for requirements, documentations, and cost optimizations.
-              </p>
-            </div>
+        <MovingCircle />
+        
+        {/* Lanyard container at page level — keeps canvas height confined to hero section
+            but doesn't limit its z-index (z-30 or z-60 will stack above #home content) */}
+        <div className="absolute top-0 left-0 right-0 h-[85vh] pointer-events-none overflow-visible">
+          <Lanyard />
+        </div>
 
-            {/* Right Column Spacer (leaves area empty for the card to hang over) */}
-            <div className="lg:col-span-5 w-full h-[500px] lg:h-[600px] select-none pointer-events-none" />
-
-            {/* Lanyard overlaying the entire grid container */}
-            <Lanyard />
-          </div>
-
-          {/* Interactive Safari Preview with Dynamic Glow */}
-          <div className="relative w-full flex justify-center">
-            {/* Glow Backplate */}
+        <section id="home" className="min-h-[85vh] flex flex-col justify-between pt-16 pb-20 px-6 md:px-12 max-w-[1400px] mx-auto w-full relative overflow-visible">
+          <div className="flex-1 flex flex-col justify-center">
+            {/* Tag/Badge */}
             <motion.div
-              className="absolute -inset-4 rounded-[2rem] blur-3xl opacity-20 pointer-events-none z-0"
-              style={{ backgroundColor: glowColor }}
-            />
-            {/* Mockup Container */}
-            <motion.div
-              className="w-full relative z-10"
-              style={{
-                filter: "drop-shadow(0 4px 20px rgba(0,0,0,0.4))",
-              }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 mb-10 w-fit relative z-[1]"
             >
-              <LiveSitePreview />
+              <span className="inline-block w-2 h-2 bg-accent rounded-full animate-pulse" />
+              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-text-muted">
+                Available for AI & Automation Projects
+              </span>
             </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-[9vw] sm:text-[8vw] lg:text-[clamp(4.5rem,7vw,8.5rem)] font-normal tracking-tighter leading-[0.9] text-text-primary max-w-5xl relative z-[1]"
+            >
+              GenAI engineer <br /> & full-stack <span className="text-accent font-accent lowercase tracking-normal italic font-normal">builder</span>
+            </motion.h1>
+
+            {/* Description & Buttons Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-24 items-center relative z-[2]">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="lg:col-span-4"
+              >
+                <p className="text-text-muted text-base md:text-lg leading-relaxed max-w-md font-medium">
+                  Shipping <span className="text-text-primary font-bold">AI-native products</span> where <span className="font-accent italic text-accent lowercase">great design</span> meets <span className="text-text-primary font-bold italic">GenAI-powered automation</span>.
+                </p>
+              </motion.div>
+
+              {/* Rotating circle anchor — center column of description grid */}
+              <div className="lg:col-span-4 flex justify-center items-center py-8">
+                <div id="hero-text-anchor" className="w-2 h-2 pointer-events-none opacity-0" />
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="lg:col-span-4 flex flex-wrap gap-4 items-center lg:justify-end lg:items-end"
+              >
+                <a
+                  href="mailto:nikhildadhich91@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-5 rounded-full border border-border-hairline hover:border-accent transition-colors bg-bg-raised flex items-center justify-center text-text-primary hover:text-accent shadow-sm"
+                  title="Mail"
+                >
+                  <Mail size={18} />
+                </a>
+                <a
+                  href="https://linkedin.com/in/nikhil-dadhich91"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-5 rounded-full border border-border-hairline hover:border-accent transition-colors bg-bg-raised flex items-center justify-center text-text-primary hover:text-accent shadow-sm"
+                  title="LinkedIn"
+                >
+                  <LinkedinIcon className="w-[18px] h-[18px]" />
+                </a>
+                <a
+                  href="https://github.com/nikhildadhich91-gif"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-5 rounded-full border border-border-hairline hover:border-accent transition-colors bg-bg-raised flex items-center justify-center text-text-primary hover:text-accent shadow-sm"
+                  title="GitHub"
+                >
+                  <GithubIcon className="w-[18px] h-[18px]" />
+                </a>
+                <a
+                  href="#"
+                  className="p-5 rounded-full border border-border-hairline hover:border-accent transition-colors bg-bg-raised flex items-center justify-center text-text-primary hover:text-accent shadow-sm"
+                  title="Resume"
+                >
+                  <FileTextIcon className="w-[18px] h-[18px]" />
+                </a>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Footer of Hero */}
+          <div className="pt-8 border-t border-border-hairline grid grid-cols-2 md:grid-cols-4 gap-6 relative z-[1]">
+            {[
+              { label: "Available for", val: "AI & Automation Projects", icon: <GlobeIcon className="w-2.5 h-2.5 text-accent" /> },
+              { label: "Specialization", val: "GenAI & Full-Stack" },
+              { label: "Contact", val: "Jaipur, India" },
+              { label: "Opportunities", val: "Open for Remote Roles" }
+            ].map((item, idx) => (
+              <div key={idx} className="flex flex-col gap-2">
+                <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-text-muted flex items-center gap-2">
+                  {item.icon} {item.label}
+                </span>
+                <span className="text-xs font-normal uppercase tracking-tight text-text-primary">
+                  {item.val}
+                </span>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Stats Strip */}
-        <section className="w-full bg-bg-raised/40 border-y border-border-hairline py-12 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto px-6 lg:px-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="flex flex-col gap-1.5">
-              <span className="text-3xl md:text-5xl font-bold font-display text-text-primary tracking-tight">
-                <NumberTicker value={8} />
-                <span>+</span>
-              </span>
-              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">SAAS PRODUCTS BUILT</span>
-            </div>
-            <div className="flex flex-col gap-1.5 border-y md:border-y-0 md:border-x border-border-hairline py-6 md:py-0">
-              <span className="text-3xl md:text-5xl font-bold font-display text-text-primary tracking-tight flex items-center justify-center">
-                <NumberTicker value={1} />
-                <span>M+</span>
-              </span>
-              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">API CALLS HANDLED</span>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <span className="text-3xl md:text-5xl font-bold font-display text-text-primary tracking-tight flex items-center justify-center">
-                <NumberTicker value={99.9} decimals={1} />
-                <span>%</span>
-              </span>
-              <span className="font-mono text-[10px] tracking-wider text-text-muted uppercase">DEPLOYMENT UPTIME</span>
+        {/* Section 2: About */}
+        <section id="about" className="py-32 px-6 md:px-12 bg-bg-raised/40 border-y border-border-hairline relative overflow-x-hidden">
+          {/* Circle anchor: x=150px matches red box center (left edge area);
+              top-[170px] places circle center vertically on the About heading */}
+          <div
+            id="about-text-anchor"
+            className="absolute top-[170px] left-[150px] w-2 h-2 opacity-0 pointer-events-none hidden lg:block"
+          />
+
+          <div className="max-w-[1400px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-24 items-center">
+              {/* Left Column: Heading */}
+              <div className="lg:col-span-5 relative z-[2]">
+
+                <motion.h2
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: !0 }}
+                  className="text-[12vw] md:text-[8vw] font-normal tracking-tighter leading-[0.85] mb-8 text-text-primary"
+                >
+                  About <br /> <span className="text-accent font-accent lowercase tracking-normal italic opacity-100 font-normal">me</span>
+                </motion.h2>
+                <div className="flex items-center gap-4 mb-12">
+                  <span className="w-12 h-px bg-accent" />
+                  <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-text-muted">
+                    GenAI & Fullstack
+                  </span>
+                </div>
+              </div>
+
+              {/* Right Column: Descriptions & Stats Cards */}
+              <div className="lg:col-span-7 flex flex-col gap-12 relative z-[2]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 text-base md:text-lg text-text-muted font-medium leading-relaxed">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: !0 }}
+                  >
+                    Based in Jaipur, I&apos;m a <span className="text-text-primary font-semibold">GenAI Engineer</span> and <span className="text-text-primary font-semibold">Full-Stack Developer</span> specializing in <span className="text-text-primary font-semibold">agentic workflows, RAG pipelines,</span> and <span className="text-text-primary font-semibold">AI-native SaaS products</span>. I turn complex automation ideas into production-ready systems.
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: !0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    I bring the same rigor to everything I ship: <span className="text-text-primary font-semibold">clean architecture, LLM orchestration,</span> and interfaces that feel as good as they function. <span className="text-text-primary font-semibold">Open to building high-performance websites, MVPs, and custom SaaS platforms</span> for startups and businesses.
+                  </motion.div>
+                </div>
+
+                {/* Info Cards */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                  {[
+                    { label: "Education", value: "IPS College" },
+                    { label: "Location", value: "Jaipur, IN" },
+                    { label: "Focus", value: "GenAI & SaaS" },
+                    { label: "Status", value: "Active" }
+                  ].map((card, idx) => (
+                    <motion.div
+                      key={idx}
+                      whileHover={{ y: -8, borderColor: "var(--color-accent)" }}
+                      className="p-5 md:p-6 lg:p-8 border border-border-hairline rounded-[2rem] bg-bg-raised text-center flex flex-col items-center justify-center transition-all duration-500 group shadow-sm"
+                    >
+                      <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-text-muted mb-2 group-hover:text-accent transition-colors">
+                        {card.label}
+                      </p>
+                      <p className="text-xs sm:text-sm font-bold uppercase text-text-primary group-hover:scale-105 transition-transform">
+                        {card.value}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Section 2: Work Section (Slider + Grid) */}
-        <section id="work" className="w-full py-32 bg-bg-raised/10 border-t border-border-hairline">
-          <div className="max-w-7xl mx-auto px-6 lg:px-16 flex flex-col items-center text-center">
-            <div className="max-w-2xl mx-auto mb-12 select-none">
-              <span className="font-mono text-xs uppercase tracking-widest text-text-muted mb-2 block">VISUAL LOG</span>
-              <h2 className="text-3xl sm:text-4xl font-display text-text-primary font-bold">Featured Project Showcase</h2>
-            </div>
-            <div className="w-full">
-              <ProjectSlider />
+        {/* Section 3: Works (Projects) */}
+        <section id="projects" className="py-32 px-6 md:px-12 bg-bg-base">
+          <div className="max-w-[1400px] mx-auto">
+            {/* Section Header */}
+            <div className="flex flex-col items-center text-center mb-24 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: !0 }}
+                transition={{ duration: 1 }}
+              >
+                <h2 className="text-[10vw] lg:text-[clamp(6rem,8vw,10rem)] font-normal tracking-tighter leading-[0.85] mb-8 text-text-primary">
+                  Project <br /> <span className="text-accent font-accent lowercase tracking-normal italic font-normal">gallery</span>
+                </h2>
+                <div className="flex items-center justify-center gap-2">
+                  <span className="h-px w-12 bg-accent/20" />
+                  <p className="text-text-muted font-mono text-[9px] uppercase tracking-[0.4em] leading-relaxed">
+                    Handpicked selection
+                  </p>
+                  <span className="h-px w-12 bg-accent/20" />
+                </div>
+              </motion.div>
             </div>
 
-            {/* Grid of all builds */}
-            <div className="w-full max-w-5xl mx-auto mt-32 text-left">
-              <h3 className="font-mono text-xs text-text-muted uppercase tracking-wider mb-8 border-b border-border-hairline pb-3">
-                ALL BUILDS & CASE STUDIES ({PROJECTS_DATA.length})
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {PROJECTS_DATA.map((proj) => (
-                  <TiltCard
-                    key={proj.slug}
-                    title={proj.title}
-                    description={proj.desc}
-                    status={proj.status}
-                    imageSrc={proj.image}
-                    imageAlt={proj.title}
-                    href={`/services/${proj.slug === "bitwise-consulting" ? "software" : proj.slug === "retailos" ? "software" : proj.slug === "agency-os" ? "software" : proj.slug === "kanban-board" ? "software" : "software"}`}
-                    accent={proj.accent}
-                  />
+            {/* Projects list in exact layout */}
+            <div className="flex flex-col gap-[8vw]">
+              {projects.map((proj, idx) => (
+                <article key={proj.id} className="group relative">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    {/* Index Column */}
+                    <div className="lg:col-span-1 hidden lg:block select-none pointer-events-none">
+                      <span className="text-[6vw] font-normal text-text-primary opacity-[0.03] group-hover:opacity-8 transition-all leading-none">
+                        {proj.id}
+                      </span>
+                    </div>
+
+                    {/* Content Column */}
+                    <div className="lg:col-span-5 flex flex-col justify-center">
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: !0 }}
+                        className="text-accent font-mono text-[10px] uppercase tracking-[0.4em] mb-6 flex items-center gap-3"
+                      >
+                        <span className="w-1.5 h-1.5 bg-accent rounded-full animate-ping" />
+                        {proj.category}
+                      </motion.p>
+
+                      <motion.h3
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: !0 }}
+                        className="text-3xl xl:text-5xl font-normal mb-8 group-hover:text-accent transition-colors duration-500 text-text-primary leading-tight font-display"
+                      >
+                        {proj.title}
+                      </motion.h3>
+
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: !0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-text-muted text-base leading-relaxed mb-6 font-medium"
+                      >
+                        {proj.description}
+                      </motion.p>
+
+                      <div className="mb-8">
+                        <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-text-muted mb-3 underline decoration-accent/20">
+                          Main Highlights
+                        </p>
+                        <p className="text-sm font-normal text-text-primary/80">
+                          {proj.mainPortion}
+                        </p>
+                      </div>
+
+                      {/* Tech Tags */}
+                      <div className="flex flex-wrap gap-2 mb-10">
+                        {proj.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-4 py-1.5 border border-border-hairline rounded-full text-[9px] font-medium font-mono text-text-muted uppercase tracking-widest bg-bg-raised"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Action Links */}
+                      <div className="flex gap-8">
+                        {proj.liveUrl && (
+                          <motion.a
+                            whileHover={{ scale: 1.1, y: -3 }}
+                            whileTap={{ scale: 0.95 }}
+                            href={proj.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
+                            title="Live Site"
+                          >
+                            <GlobeIcon className="w-5 h-5" />
+                          </motion.a>
+                        )}
+                        {proj.githubUrl && (
+                          <motion.a
+                            whileHover={{ scale: 1.1, y: -3 }}
+                            whileTap={{ scale: 0.95 }}
+                            href={proj.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
+                            title="GitHub Source"
+                          >
+                            <GithubIcon className="w-5 h-5" />
+                          </motion.a>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Image Column */}
+                    <div className="lg:col-span-6 relative aspect-video overflow-hidden rounded-[2.5rem] border border-border-hairline shadow-2xl group/img bg-bg-raised">
+                      <motion.div
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        className="w-full h-full bg-bg-raised flex items-center justify-center relative overflow-hidden"
+                      >
+                        {proj.imageUrl ? (
+                          <img
+                            src={proj.imageUrl}
+                            alt={proj.alt}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <GlobeIcon className="w-[100px] h-[100px] text-text-primary/[0.03] group-hover/img:text-accent/10 transition-colors duration-1000" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-accent/5 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-700" />
+                        <div className="absolute bottom-10 left-10 p-4 bg-bg-base/40 backdrop-blur-md rounded-2xl border border-border-hairline translate-y-20 opacity-0 group-hover/img:translate-y-0 group-hover/img:opacity-100 transition-all duration-700">
+                          <p className="text-[10px] font-mono tracking-[0.3em] text-accent">
+                            PROJECT PREVIEW
+                          </p>
+                        </div>
+                      </motion.div>
+                      {proj.liveUrl && (
+                        <a
+                          href={proj.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-text-primary text-bg-base flex items-center justify-center scale-0 group-hover/img:scale-100 transition-transform duration-500 shadow-2xl shadow-text-primary/20 z-20"
+                        >
+                          <ArrowUpRightIcon className="w-8 h-8" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                  {idx !== projects.length - 1 && (
+                    <div className="mt-20 w-full h-px bg-gradient-to-r from-transparent via-border-hairline to-transparent" />
+                  )}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* AI Visual Concept Gallery */}
+        <ConceptGallery />
+
+        {/* Lower page content wrapper — slides UP and OVER the sticky gallery container */}
+        <div className="relative z-20 bg-bg-base border-t border-border-hairline shadow-[0_-20px_50px_rgba(0,0,0,0.12)]">
+          {/* Section 4: Journey (Experience) */}
+          <section id="experience" className="py-32 px-6 md:px-12 bg-bg-raised/40 border-b border-border-hairline relative overflow-hidden">
+            <div className="max-w-[1400px] mx-auto relative z-10">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-28">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: !0 }}
+                >
+                  <h2 className="text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
+                    journey <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-6xl lg:text-[clamp(4rem,6vw,7rem)]">so far</span>
+                  </h2>
+                  <div className="w-16 h-px bg-accent/40 mt-10" />
+                </motion.div>
+                <div className="hidden md:block text-right">
+                  <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.4em] leading-relaxed">
+                    Professional timeline
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-12 max-w-4xl">
+                {EXPERIENCE.map((exp) => (
+                  <motion.div
+                    key={exp.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: !0 }}
+                    className="grid grid-cols-1 md:grid-cols-12 gap-6 p-8 border border-border-hairline rounded-[2.5rem] bg-bg-base/80 hover:border-accent transition-colors duration-500 shadow-sm group"
+                  >
+                    <div className="md:col-span-3">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted mb-2">
+                        {exp.period}
+                      </p>
+                      <span className="px-3 py-1 border border-border-hairline rounded-full text-[8px] font-mono tracking-widest uppercase text-text-muted bg-bg-raised">
+                        {exp.status}
+                      </span>
+                    </div>
+                    <div className="md:col-span-9 space-y-4">
+                      <h3 className="text-2xl font-bold font-display text-text-primary group-hover:text-accent transition-colors">
+                        {exp.role} <span className="text-text-muted font-normal">@ {exp.company}</span>
+                      </h3>
+                      <p className="text-text-muted text-sm leading-relaxed">
+                        {exp.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {exp.highlights.map((hl) => (
+                          <span
+                            key={hl}
+                            className="px-3 py-1 bg-bg-raised text-text-primary text-[9px] font-medium font-mono uppercase tracking-wider rounded-md"
+                          >
+                            {hl}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Section 3: Services Section — 3D Scroll-Pinned List */}
-        <ServicesScrollSection />
-
-        {/* Sticky How I Work Section */}
-        <section className="w-full py-32 border-t border-border-hairline">
-          <div className="max-w-7xl mx-auto px-6 lg:px-16 flex flex-col items-center">
-            <div className="text-center max-w-2xl mx-auto mb-20 select-none">
-              <span className="font-mono text-xs uppercase tracking-widest text-text-muted mb-2 block">WORK ETHOS</span>
-              <h2 className="text-3xl sm:text-4xl font-display text-text-primary font-bold">The Builder&apos;s Playbook</h2>
-            </div>
-            <div className="w-full">
-              <HowIWorkStack />
-            </div>
-          </div>
-        </section>
-
-        {/* Section 4: About Section (Profile & Experience) */}
-        <section id="about" className="w-full py-32 bg-bg-raised/10 border-t border-border-hairline">
-          <div className="max-w-4xl mx-auto px-6 lg:px-16 text-left">
-            <div className="max-w-2xl mb-16 select-none">
-              <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary mb-3 block">
-                ABOUT THE BUILDER
-              </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
-                Nikhil Dadhich
-              </h2>
-              <p className="text-text-muted mt-6 text-sm sm:text-base leading-relaxed">
-                21-year-old AI Builder and Full-Stack SaaS Developer based in Jaipur, India.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
-              {/* Bio & Experience (span 2) */}
-              <div className="md:col-span-2 space-y-12">
-                <div className="space-y-4">
-                  <h3 className="font-display text-xl font-bold text-text-primary">The Profile</h3>
-                  <p className="text-text-muted leading-relaxed text-sm">
-                    I focus on shipping production software solo—handling everything from backend architecture to containerized cloud deployments. I combine my engineering approach with a Business Analyst&apos;s discipline for requirements, detailed documentation, and stakeholder communication.
-                  </p>
-                </div>
-
-                {/* Experience Timeline */}
-                <div className="space-y-6">
-                  <h3 className="font-display text-xl font-bold text-text-primary">Experience</h3>
-                  <div className="space-y-8 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[1px] before:bg-border-hairline">
-                    {EXPERIENCE.map((exp, idx) => (
-                      <div key={idx} className="relative pl-8 group">
-                        <div className="absolute left-[9px] top-1.5 w-[7px] h-[7px] rounded-full bg-text-primary group-hover:scale-125 transition-transform" />
-                        <span className="font-mono text-[10px] text-text-muted">{exp.period}</span>
-                        <h4 className="text-base font-bold text-text-primary font-display mt-0.5">{exp.role}</h4>
-                        <h5 className="text-xs text-text-muted font-mono">{exp.company}</h5>
-                        <ul className="list-disc list-outside ml-4 mt-3 text-xs text-text-muted space-y-1.5 leading-relaxed">
-                          {exp.details.map((detail, dIdx) => (
-                            <li key={dIdx}>{detail}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+          {/* Section 5: Stack (Tech Stack) */}
+          <section id="tech-stack" className="py-32 px-6 md:px-12 bg-bg-base relative overflow-hidden">
+            <div className="max-w-[1400px] mx-auto relative z-10">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-28">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: !0 }}
+                >
+                  <h2 className="text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
+                    operational <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-6xl lg:text-[clamp(4rem,6vw,7rem)]">stack</span>
+                  </h2>
+                  <div className="w-16 h-px bg-accent/40 mt-10" />
+                </motion.div>
               </div>
 
-              {/* Sidebar: Stack, Education, Certs */}
-              <div className="md:col-span-1 space-y-6">
-                {/* Tech Stack */}
-                <div className="bg-bg-raised border border-border-hairline rounded-2xl p-5 shadow-xl">
-                  <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-wider mb-4 border-b border-border-hairline pb-2 font-bold">
-                    Operational Stack
-                  </h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {TECH_TAGS.map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded bg-bg-base border border-border-hairline text-text-muted"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Education */}
-                <div className="bg-bg-raised border border-border-hairline rounded-2xl p-5 shadow-xl space-y-4 text-left">
-                  <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-wider border-b border-border-hairline pb-2 font-bold">
-                    Education
-                  </h4>
-                  <div className="space-y-3">
-                    <div>
-                      <h5 className="text-xs font-bold text-text-primary font-display">BBA</h5>
-                      <p className="text-[10px] text-text-muted leading-relaxed">IPS Business College, Jaipur (2022–2025)</p>
-                    </div>
-                    <div>
-                      <h5 className="text-xs font-bold text-text-primary font-display">Higher Secondary (Commerce)</h5>
-                      <p className="text-[10px] text-text-muted leading-relaxed">MSS School, Kishangarh</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Certifications */}
-                <div className="bg-bg-raised border border-border-hairline rounded-2xl p-5 shadow-xl space-y-3 text-left">
-                  <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-wider border-b border-border-hairline pb-2 font-bold">
-                    Certifications
-                  </h4>
-                  <ul className="space-y-2 text-[10px] text-text-muted leading-relaxed list-none">
-                    <li className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-text-primary" />
-                      NISM Series VIII – Equity Derivatives
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-text-primary" />
-                      Google Agile Project Management
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Tech Stack Curved Marquee Loop */}
-        <section className="w-full border-t border-border-hairline bg-bg-raised/10 py-1 overflow-hidden">
-          <CurvedLoop
-            marqueeText="GCP ✦ FIREBASE ✦ CLAUDE CODE ✦ APPIAN ✦ POWER BI ✦ PYTHON ✦ NEXT.JS ✦"
-            speed={2.2}
-            curveAmount={100}
-            direction="left"
-            interactive={true}
-          />
-        </section>
-
-        {/* Interactive Funnel Section using TrueFocus */}
-        <section className="w-full border-t border-border-hairline bg-bg-raised/20 py-24 select-none">
-          <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
-            <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary bg-text-primary/5 border border-border-hairline px-3.5 py-1.5 rounded-full select-none">
-              INTERACTIVE MISSION SPEC
-            </span>
-            <div className="py-8">
-              <TrueFocus
-                sentence="TAP TO FOCUS ON THE OBJECTIVE"
-                manualMode={true}
-                blurAmount={6}
-                borderColor="#ff8a3d"
-                glowColor="rgba(255, 138, 61, 0.6)"
-                animationDuration={0.45}
-                onClick={() => {
-                  const contactSection = document.getElementById("contact");
-                  if (contactSection) {
-                    contactSection.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-              />
-            </div>
-            <p className="text-text-muted text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
-              Hover over the words to shift visual focus. Click anywhere on the banner to slide down and transmit your project specifications.
-            </p>
-          </div>
-        </section>
-
-        {/* Section 5: Contact Section (Details & Form) */}
-        <section id="contact" className="w-full border-t border-border-hairline">
-          <div className="max-w-5xl mx-auto px-6 lg:px-16 py-32 text-left">
-            <div className="max-w-2xl mb-16 select-none">
-              <span className="font-mono text-xs uppercase tracking-[0.25em] text-text-primary mb-3 block">
-                GET IN TOUCH
-              </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-text-primary tracking-tight leading-tight">
-                Let&apos;s Talk Shop
-              </h2>
-              <p className="text-text-muted mt-6 text-sm sm:text-base leading-relaxed">
-                No sales pitches or automated drip campaigns. Send a direct request, and we will talk software engineering, project specifications, or workflow optimization.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
-              {/* Contact details */}
-              <div className="lg:col-span-2 space-y-6">
-                <h3 className="font-display text-xl font-bold text-text-primary">Direct Channels</h3>
-                <div className="space-y-4">
-                  <a
-                    href="mailto:nikhildadhich91@gmail.com"
-                    className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40 hover:border-text-primary/30 hover:bg-bg-raised/80 transition-all group"
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {SKILL_CATEGORIES.map((cat, idx) => (
+                  <motion.div
+                    key={idx}
+                    whileHover={{ y: -5, borderColor: "var(--color-accent)" }}
+                    className="p-8 border border-border-hairline rounded-[2.5rem] bg-bg-raised flex flex-col gap-6 transition-all duration-500 shadow-sm"
                   >
-                    <div className="p-2.5 rounded-lg bg-bg-base text-text-primary border border-border-hairline">
-                      <Mail className="w-5 h-5" />
+                    <h3 className="font-display text-xl font-bold border-b border-border-hairline pb-4 text-text-primary">
+                      {cat.category}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {cat.skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="px-4 py-2 border border-border-hairline rounded-full text-[9px] font-medium font-mono text-text-muted uppercase tracking-widest bg-bg-base"
+                        >
+                          {skill}
+                        </span>
+                      ))}
                     </div>
-                    <div>
-                      <h4 className="text-xs font-mono text-text-muted">EMAIL</h4>
-                      <p className="text-sm font-semibold text-text-primary group-hover:text-text-primary dark:group-hover:text-white transition-colors">
-                        nikhildadhich91@gmail.com
-                      </p>
-                    </div>
-                  </a>
-
-                  <a
-                    href="https://linkedin.com/in/nikhil-dadhich91"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40 hover:border-text-primary/30 hover:bg-bg-raised/80 transition-all group"
-                  >
-                    <div className="p-2.5 rounded-lg bg-bg-base text-text-primary border border-border-hairline">
-                      <LinkedinIcon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-mono text-text-muted">LINKEDIN</h4>
-                      <p className="text-sm font-semibold text-text-primary group-hover:text-text-primary dark:group-hover:text-white transition-colors">
-                        linkedin.com/in/nikhil-dadhich91
-                      </p>
-                    </div>
-                  </a>
-
-                  <div className="flex items-center gap-4 p-4 rounded-xl border border-border-hairline bg-bg-raised/40">
-                    <div className="p-2.5 rounded-lg bg-bg-base text-text-primary border border-border-hairline">
-                      <MapPin className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-mono text-text-muted">LOCATION</h4>
-                      <p className="text-sm font-semibold text-text-primary">
-                        Jaipur, Rajasthan, India
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Form */}
-              <div className="lg:col-span-3 bg-bg-raised border border-border-hairline rounded-2xl p-6 sm:p-8 shadow-2xl">
-                <h3 className="font-display text-xl font-bold text-text-primary mb-6">Send a Message</h3>
-                
-                {submitted ? (
-                  <div className="border border-emerald-500/20 bg-emerald-500/5 text-emerald-300 p-6 rounded-xl text-center space-y-3">
-                    <h4 className="font-bold text-sm font-display">Transmission Received</h4>
-                    <p className="text-xs leading-relaxed text-text-muted">
-                      Thank you. Your message has been logged. I&apos;ll read through your specifications and reach out.
-                    </p>
-                    <button
-                      onClick={() => setSubmitted(false)}
-                      className="font-mono text-[10px] uppercase text-text-primary hover:underline"
-                    >
-                      Send another message
-                    </button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleContactSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="flex flex-col gap-2">
-                        <label htmlFor="name" className="font-mono text-[10px] text-text-muted uppercase tracking-wider font-bold">
-                          Name
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="e.g. John Doe"
-                          className="w-full bg-bg-base border border-border-hairline focus:border-text-primary text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 font-mono"
-                        />
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        <label htmlFor="email" className="font-mono text-[10px] text-text-muted uppercase tracking-wider font-bold">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="e.g. john@example.com"
-                          className="w-full bg-bg-base border border-border-hairline focus:border-text-primary text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 font-mono"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="message" className="font-mono text-[10px] text-text-muted uppercase tracking-wider font-bold">
-                        Message / Specs
-                      </label>
-                      <textarea
-                        id="message"
-                        required
-                        rows={5}
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Describe your project, platform, or specifications..."
-                        className="w-full bg-bg-base border border-border-hairline focus:border-text-primary text-text-primary rounded-xl px-4 py-3 text-sm focus:outline-none transition-all placeholder-text-muted/30 leading-relaxed font-mono"
-                      />
-                    </div>
-
-                    <div className="pt-2 flex justify-start">
-                      <MagneticButton
-                        type="submit"
-                        className="bg-text-primary text-bg-base font-mono text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-                      >
-                        Transmit Specs
-                        <Send className="w-3.5 h-3.5" />
-                      </MagneticButton>
-                    </div>
-                  </form>
-                )}
+                  </motion.div>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
-      </motion.div>
+          </section>
+          <Footer />
+        </div>
+      </div>
     </>
   );
 }

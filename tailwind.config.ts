@@ -19,16 +19,17 @@ const config: Config = {
           muted: "var(--text-muted)",
         },
         accent: {
-          signal: "var(--accent-signal)",
-          ai: "var(--accent-ai)",
+          DEFAULT: "var(--color-accent)",
+          signal: "var(--color-accent)",
+          ai: "var(--color-accent)",
         },
         border: {
           hairline: "var(--border-hairline)",
         },
       },
       fontFamily: {
-        display: ["var(--font-display)", "sans-serif"],
-        sans: ["var(--font-body)", "sans-serif"],
+        display: ["var(--font-display)", "serif"],
+        sans: ["var(--font-sans)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },
     },

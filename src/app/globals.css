@@ -4,12 +4,13 @@
 
 :root {
   --bg-base: #ffffff;
-  --bg-raised: #f7f9fb;
-  --text-primary: #0a0f14;
-  --text-muted: #64748b;
-  --accent-signal: #000000;
-  --accent-ai: #4b5563;
-  --border-hairline: rgba(0, 0, 0, 0.08);
+  --bg-raised: #f8f9fa;
+  --text-primary: #000000;
+  --text-muted: #4b5563;
+  --color-accent: #ff6b00;
+  --border-hairline: rgba(0, 0, 0, 0.06);
+  --font-sans: "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Quintessential", serif;
   --expo-in: cubic-bezier(0.95, 0.05, 0.795, 0.035);
   --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
   --expo-in-out: cubic-bezier(1, 0, 0, 1);
@@ -17,21 +18,30 @@
 
 .dark {
   --bg-base: #000000;
-  --bg-raised: #0c0d10;
-  --text-primary: #EDEFF2;
-  --text-muted: #8B93A1;
-  --accent-signal: #ffffff;
-  --accent-ai: #9ca3af;
-  --border-hairline: rgba(237, 239, 242, 0.08);
-  --expo-in: cubic-bezier(0.95, 0.05, 0.795, 0.035);
-  --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --expo-in-out: cubic-bezier(1, 0, 0, 1);
+  --bg-raised: #0a0a0a;
+  --text-primary: #ffffff;
+  --text-muted: #9ca3af;
+  --color-accent: #ff6b00;
+  --border-hairline: rgba(255, 255, 255, 0.06);
 }
+
+.text-accent {
+  color: var(--color-accent) !important;
+}
+
+.bg-accent {
+  background-color: var(--color-accent) !important;
+}
+
+.border-accent {
+  border-color: var(--color-accent) !important;
+}
+
 
 body {
   color: var(--text-primary);
   background-color: var(--bg-base);
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
@@ -66,6 +76,15 @@ html {
 
 /* Custom selection */
 ::selection {
-  background: rgba(255, 138, 61, 0.3);
+  background: rgba(255, 107, 0, 0.2);
+  color: inherit;
+}
+
+.font-accent {
+  font-family: var(--font-display) !important;
+}
+
+/* Rotating circle text color — SVG uses currentColor, inherited from this rule */
+.moving-circle-svg {
   color: var(--text-primary);
 }
