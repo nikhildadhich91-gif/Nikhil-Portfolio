@@ -12,7 +12,8 @@ interface CircularTextProps {
   className?: string;
 }
 
-const getRotationTransition = (duration: number, from: number, loop = true) => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getRotationTransition = (duration: number, from: number, loop = true): any => ({
   from,
   to: from + 360,
   ease: 'linear',
@@ -21,7 +22,8 @@ const getRotationTransition = (duration: number, from: number, loop = true) => (
   repeat: loop ? Infinity : 0
 });
 
-const getTransition = (duration: number, from: number) => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getTransition = (duration: number, from: number): any => ({
   rotate: getRotationTransition(duration, from),
   scale: {
     type: 'spring',

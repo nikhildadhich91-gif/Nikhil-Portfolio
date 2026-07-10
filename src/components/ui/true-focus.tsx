@@ -76,7 +76,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
 
       return () => clearTimeout(timer);
     }
-  }, [specialLoadMode, startTrigger]);
+  }, [specialLoadMode, startTrigger, onComplete]);
 
   useEffect(() => {
     if (currentIndex === null || currentIndex === -1) return;
