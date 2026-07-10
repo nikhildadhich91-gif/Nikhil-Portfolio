@@ -88,3 +88,46 @@ html {
 .moving-circle-svg {
   color: var(--text-primary);
 }
+
+/* Reusable section heading standard rules */
+.section-heading {
+  font-size: 12vw;
+  font-weight: 400;
+  letter-spacing: -0.05em; /* tracking-tighter */
+  line-height: 0.9;
+  color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+  .section-heading {
+    font-size: 4.5rem; /* md:text-7xl */
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-heading {
+    font-size: clamp(5rem, 7vw, 8rem);
+  }
+}
+
+.section-heading-accent {
+  font-family: var(--font-display) !important;
+  font-style: italic;
+  color: var(--color-accent) !important;
+  text-transform: lowercase;
+  line-height: 0.9;
+  font-size: 10vw;
+  font-weight: 400;
+}
+
+@media (min-width: 768px) {
+  .section-heading-accent {
+    font-size: 3.75rem; /* md:text-6xl */
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-heading-accent {
+    font-size: clamp(4rem, 6vw, 7rem);
+  }
+}

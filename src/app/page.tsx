@@ -11,6 +11,7 @@ import { MovingCircle } from "../components/moving-circle";
 import dynamic from "next/dynamic";
 import TrueFocus from "@/components/ui/true-focus";
 import ScrollFloat from "@/components/ui/scroll-float";
+import { Safari } from "@/components/ui/safari";
 
 const Lanyard = dynamic(() => import("@/components/ui/lanyard"), { ssr: false });
 
@@ -49,13 +50,6 @@ const FileTextIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const ArrowUpRightIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={props.className}>
-    <path d="M7 17L17 7" />
-    <path d="M7 7h10v10" />
-  </svg>
-);
-
 // Type definitions
 interface ProjectItem {
   id: string;
@@ -68,6 +62,7 @@ interface ProjectItem {
   githubUrl?: string;
   imageUrl: string;
   alt: string;
+  slug: string;
 }
 
 const EXPERIENCE = [
@@ -116,6 +111,7 @@ const SKILL_CATEGORIES = [
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [activePreviewId, setActivePreviewId] = useState<string | null>(null);
 
   // isLoading stays true until PageLoader calls onComplete
   const handleLoaderDone = React.useCallback(() => {
@@ -123,18 +119,31 @@ export default function Home() {
   }, []);
 
   // Map projects data
-  const projects: ProjectItem[] = PROJECTS_DATA.map((proj, idx) => ({
-    id: `0${idx + 1}`,
-    title: proj.title,
-    category: proj.slug === "agency-os" ? "BUSINESS ANALYSIS | CASE STUDY" : "FULL-STACK | SAAS | DEPLOYED",
-    description: proj.desc,
-    mainPortion: proj.results || proj.narrative,
-    tags: proj.tech,
-    liveUrl: proj.slug === "agency-os" ? undefined : `https://${proj.slug}.vercel.app/`,
-    githubUrl: proj.slug === "agency-os" ? undefined : `https://github.com/nikhildadhich91-gif/${proj.slug}`,
-    imageUrl: proj.image,
-    alt: `${proj.title} - ${proj.desc}`
-  }));
+  const projects: ProjectItem[] = PROJECTS_DATA.map((proj, idx) => {
+    let liveUrl = undefined;
+    if (proj.slug === "retailos") {
+      liveUrl = "https://retailos-multi-tenant-saas-retail-platform-429819667205.us-west1.run.app/";
+    } else if (proj.slug === "bitwise-consulting") {
+      liveUrl = "https://bitwise-ag.vercel.app/";
+    } else if (proj.slug === "utkarsh-builder") {
+      liveUrl = "https://utkarsh-builder.vercel.app/";
+    } else if (proj.slug === "kanban-board") {
+      liveUrl = "https://kanban-for-startup.vercel.app/";
+    }
+    return {
+      id: `0${idx + 1}`,
+      title: proj.title,
+      category: proj.slug === "agency-os" ? "BUSINESS ANALYSIS | CASE STUDY" : "FULL-STACK | SAAS | DEPLOYED",
+      description: proj.desc,
+      mainPortion: proj.results || proj.narrative,
+      tags: proj.tech,
+      liveUrl,
+      githubUrl: proj.slug === "agency-os" ? undefined : `https://github.com/nikhildadhich91-gif/${proj.slug}`,
+      imageUrl: proj.image,
+      alt: `${proj.title} - ${proj.desc}`,
+      slug: proj.slug
+    };
+  });
 
   return (
     <>
@@ -361,7 +370,7 @@ export default function Home() {
                 <div className="flex flex-col items-center mb-8">
                   <ScrollFloat
                     containerClassName="!overflow-visible"
-                    textClassName="text-[10vw] lg:text-[clamp(6rem,8vw,10rem)] font-normal tracking-tighter leading-[0.85] text-text-primary"
+                    textClassName="section-heading"
                     scrollStart="top bottom-=10%"
                     scrollEnd="bottom center"
                   >
@@ -369,7 +378,7 @@ export default function Home() {
                   </ScrollFloat>
                   <ScrollFloat
                     containerClassName="!overflow-visible"
-                    textClassName="text-accent font-accent lowercase tracking-normal italic font-normal text-[10vw] lg:text-[clamp(6rem,8vw,10rem)] leading-[0.85]"
+                    textClassName="section-heading-accent"
                     scrollStart="top bottom-=10%"
                     scrollEnd="bottom center"
                   >
@@ -482,39 +491,109 @@ export default function Home() {
                     </div>
 
                     {/* Image Column */}
-                    <div className="lg:col-span-6 relative aspect-video overflow-hidden rounded-[2.5rem] border border-border-hairline shadow-2xl group/img bg-bg-raised">
-                      <motion.div
-                        whileHover={{ scale: 1.03 }}
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                        className="w-full h-full bg-bg-raised flex items-center justify-center relative overflow-hidden"
-                      >
-                        {proj.imageUrl ? (
-                          <img
-                            src={proj.imageUrl}
-                            alt={proj.alt}
-                            className="object-cover w-full h-full"
-                          />
-                        ) : (
-                          <GlobeIcon className="w-[100px] h-[100px] text-text-primary/[0.03] group-hover/img:text-accent/10 transition-colors duration-1000" />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-accent/5 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-700" />
-                        <div className="absolute bottom-10 left-10 p-4 bg-bg-base/40 backdrop-blur-md rounded-2xl border border-border-hairline translate-y-20 opacity-0 group-hover/img:translate-y-0 group-hover/img:opacity-100 transition-all duration-700">
-                          <p className="text-[10px] font-mono tracking-[0.3em] text-accent">
-                            PROJECT PREVIEW
-                          </p>
-                        </div>
-                      </motion.div>
-                      {proj.liveUrl && (
-                        <a
-                          href={proj.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-text-primary text-bg-base flex items-center justify-center scale-0 group-hover/img:scale-100 transition-transform duration-500 shadow-2xl shadow-text-primary/20 z-20"
+                    {activePreviewId === proj.id ? (
+                      <div className="lg:col-span-6 relative aspect-[16/10] overflow-hidden rounded-[2.5rem] border border-border-hairline shadow-2xl bg-bg-raised flex flex-col z-30">
+                        <Safari url={proj.liveUrl} className="w-full h-full">
+                          {/* Sites that set X-Frame-Options / CSP frame-ancestors block iframes.
+                              Show a premium fallback with direct open-in-new-tab for those. */}
+                          {[].includes(proj.slug) ? (
+                            <div className="w-full h-full flex flex-col items-center justify-center gap-6 bg-[#0a0a0a] px-8 text-center select-none">
+                              {/* Project thumbnail preview */}
+                              {proj.imageUrl && (
+                                <div className="w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 shadow-2xl opacity-70">
+                                  <img src={proj.imageUrl} alt={proj.alt} className="w-full object-cover object-top" />
+                                </div>
+                              )}
+                              <div className="space-y-2">
+                                <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-accent/80">Preview restricted</p>
+                                <p className="text-white/60 text-[13px] leading-relaxed max-w-xs">
+                                  This site enforces strict embedding policies — it needs to open directly in the browser.
+                                </p>
+                              </div>
+                              <a
+                                href={proj.liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2.5 px-7 py-3 bg-accent text-white font-mono text-[10px] uppercase tracking-widest rounded-full hover:bg-accent/90 active:scale-95 transition-all font-bold shadow-lg shadow-accent/20"
+                              >
+                                Open Live Site
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                  <polyline points="15 3 21 3 21 9" />
+                                  <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                              </a>
+                            </div>
+                          ) : (
+                            <iframe
+                              src={proj.liveUrl}
+                              className="w-full h-full border-none bg-white dark:bg-[#0A0E12]"
+                              title={proj.title}
+                            />
+                          )}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setActivePreviewId(null);
+                            }}
+                            className="absolute top-2.5 right-4 z-30 text-text-muted hover:text-accent transition-colors flex items-center justify-center p-1 cursor-pointer bg-transparent border-none"
+                            title="Close Preview"
+                          >
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <line x1="18" y1="6" x2="6" y2="18" />
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                          </button>
+                        </Safari>
+                      </div>
+                    ) : (
+                      <div className="lg:col-span-6 relative aspect-[16/10] overflow-hidden rounded-[2.5rem] border border-border-hairline shadow-2xl group/img bg-bg-raised">
+                        <motion.div
+                          whileHover={{ scale: 1.03 }}
+                          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                          className="w-full h-full bg-bg-raised flex items-center justify-center relative overflow-hidden"
                         >
-                          <ArrowUpRightIcon className="w-8 h-8" />
-                        </a>
-                      )}
-                    </div>
+                          {proj.imageUrl ? (
+                            <img
+                              src={proj.imageUrl}
+                              alt={proj.alt}
+                              className="object-cover w-full h-full"
+                            />
+                          ) : (
+                            <GlobeIcon className="w-[100px] h-[100px] text-text-primary/[0.03] group-hover/img:text-accent/10 transition-colors duration-1000" />
+                          )}
+                          
+                          {proj.liveUrl ? (
+                            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center gap-4 opacity-90 md:opacity-0 md:group-hover/img:opacity-100 transition-opacity duration-300">
+                              <div className="w-14 h-14 rounded-full bg-accent text-white flex items-center justify-center shadow-lg transform scale-90 group-hover/img:scale-100 transition-transform duration-500 cursor-pointer"
+                                   onClick={() => setActivePreviewId(proj.id)}
+                              >
+                                <svg className="w-7 h-7 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setActivePreviewId(proj.id);
+                                }}
+                                className="px-5 py-2 bg-text-primary text-bg-base font-mono text-[9px] uppercase tracking-widest rounded-full hover:bg-accent hover:text-white transition-colors duration-300 font-bold shadow-lg cursor-pointer"
+                              >
+                                Live Preview
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="absolute bottom-10 left-10 p-4 bg-bg-base/40 backdrop-blur-md rounded-2xl border border-border-hairline translate-y-20 opacity-0 group-hover/img:translate-y-0 group-hover/img:opacity-100 transition-all duration-700">
+                              <p className="text-[10px] font-mono tracking-[0.3em] text-accent">
+                                CASE STUDY
+                              </p>
+                            </div>
+                          )}
+                        </motion.div>
+                      </div>
+                    )}
                   </div>
                   {idx !== projects.length - 1 && (
                     <div className="mt-20 w-full h-px bg-gradient-to-r from-transparent via-border-hairline to-transparent" />
@@ -542,7 +621,7 @@ export default function Home() {
                   <div className="flex flex-col mb-4">
                     <ScrollFloat
                       containerClassName="!overflow-visible"
-                      textClassName="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none"
+                      textClassName="section-heading"
                       scrollStart="top bottom-=10%"
                       scrollEnd="bottom center"
                     >
@@ -550,7 +629,7 @@ export default function Home() {
                     </ScrollFloat>
                     <ScrollFloat
                       containerClassName="!overflow-visible"
-                      textClassName="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)] leading-none"
+                      textClassName="section-heading-accent"
                       scrollStart="top bottom-=10%"
                       scrollEnd="bottom center"
                     >
@@ -619,7 +698,7 @@ export default function Home() {
                   <div className="flex flex-col mb-4">
                     <ScrollFloat
                       containerClassName="!overflow-visible"
-                      textClassName="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none"
+                      textClassName="section-heading"
                       scrollStart="top bottom-=10%"
                       scrollEnd="bottom center"
                     >
@@ -627,7 +706,7 @@ export default function Home() {
                     </ScrollFloat>
                     <ScrollFloat
                       containerClassName="!overflow-visible"
-                      textClassName="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)] leading-none"
+                      textClassName="section-heading-accent"
                       scrollStart="top bottom-=10%"
                       scrollEnd="bottom center"
                     >

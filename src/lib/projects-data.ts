@@ -19,7 +19,7 @@ export const PROJECTS_DATA: Project[] = [
     status: "LIVE",
     tech: ["Next.js", "Firebase", "GCP Cloud Run", "Docker", "Tailwind CSS"],
     accent: "signal",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&auto=format&fit=crop&q=80",
+    image: "/retailos-preview.png",
     narrative: "RetailOS is a solo-developed SaaS platform designed to streamline retail operations. It provides robust multi-tenant isolation, allowing separate store branches to manage inventory collections, staff shifts, and checkouts autonomously.",
     challenges: "The primary challenge was managing database structure and multi-tenancy rules in a serverless environment without incurring high persistent connection costs. Deployed containers on GCP Cloud Run are stateless, which requires quick API cold starts.",
     results: "Designed a multi-stage Docker build that shrunk the container image from 1.2GB to 180MB. Programmed Collection Rules in Firebase Studio to safeguard store data boundaries. The platform is deployed and fully active for demo audits."
@@ -43,7 +43,7 @@ export const PROJECTS_DATA: Project[] = [
     status: "LIVE",
     tech: ["Next.js 14", "Framer Motion", "Tailwind CSS", "SEO Audit"],
     accent: "signal",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
+    image: "/bitwise-preview.png",
     narrative: "A frontend redesign for a consulting group, focused on creating a premium digital experience with slick scroll-triggered motion curves.",
     challenges: "Achieving high performance and 100/100 Lighthouse scores while running complex 3D overlays and layout spring animations.",
     results: "Restructured CSS layouts using vanilla Tailwind and optimized script loaders to prevent main thread blocking, achieving near-perfect metrics across SEO and accessibility audits."
@@ -55,7 +55,7 @@ export const PROJECTS_DATA: Project[] = [
     status: "LIVE",
     tech: ["Next.js", "DnD Kit", "Tailwind CSS", "Firebase"],
     accent: "signal",
-    image: "https://images.unsplash.com/photo-1611224885990-ab7363d1f2a9?w=600&auto=format&fit=crop&q=80",
+    image: "/kanban-preview.png",
     narrative: "An advanced workflow board built specifically to handle complex task management pipelines for startups with ease and speed.",
     challenges: "Ensuring butter-smooth drag-and-drop animations while instantly syncing state across collaborative team members.",
     results: "Implemented a zero-lag dnd system with optimistic UI updates and structured Firestore real-time listeners for instant synchronization."
@@ -71,5 +71,17 @@ export const PROJECTS_DATA: Project[] = [
     narrative: "Omni Keys is a background desktop assistant that intercepts selected text globally across the OS. By pressing a global hotkey, users can run slash commands to trigger AI actions in any active window (editors, browsers, or Slack).",
     challenges: "Capturing active OS-level text selection and performing clipboard operations reliably across operating systems without native focus issues.",
     results: "Built a Tauri v2 desktop application in Rust leveraging native OS hooks, securing local API credentials in encrypted storage, and executing Gemini/OpenRouter API calls."
+  },
+  {
+    slug: "utkarsh-builder",
+    title: "Utkarsh Builder",
+    desc: "A premium real estate landing page and construction project showcase highlighting structural engineering excellence and dynamic project portfolios.",
+    status: "LIVE",
+    tech: ["Next.js", "Tailwind CSS", "Framer Motion", "GSAP"],
+    accent: "signal",
+    image: "/utkarsh-preview.png",
+    narrative: "Utkarsh Builder is a custom real estate landing page showcasing high-fidelity architectural previews, interactive maps, and construction timelines.",
+    challenges: "Ensuring high-fidelity transitions and large architectural image rendering without compromising page performance and SEO metrics.",
+    results: "Developed custom GSAP layout animations and image pre-rendering schemes to achieve visual excellence under 1.5 seconds initial load time."
   }
 ];
