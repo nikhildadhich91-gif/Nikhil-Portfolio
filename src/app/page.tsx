@@ -10,6 +10,7 @@ import { Footer } from "@/components/ui/footer";
 import { MovingCircle } from "../components/moving-circle";
 import dynamic from "next/dynamic";
 import TrueFocus from "@/components/ui/true-focus";
+import ScrollFloat from "@/components/ui/scroll-float";
 
 const Lanyard = dynamic(() => import("@/components/ui/lanyard"), { ssr: false });
 
@@ -352,14 +353,29 @@ export default function Home() {
             {/* Section Header */}
             <div className="flex flex-col items-center text-center mb-24 gap-6">
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: !0 }}
                 transition={{ duration: 1 }}
               >
-                <h2 className="text-[10vw] lg:text-[clamp(6rem,8vw,10rem)] font-normal tracking-tighter leading-[0.85] mb-8 text-text-primary">
-                  Project <br /> <span className="text-accent font-accent lowercase tracking-normal italic font-normal">gallery</span>
-                </h2>
+                <div className="flex flex-col items-center mb-8">
+                  <ScrollFloat
+                    containerClassName="!overflow-visible"
+                    textClassName="text-[10vw] lg:text-[clamp(6rem,8vw,10rem)] font-normal tracking-tighter leading-[0.85] text-text-primary"
+                    scrollStart="top bottom-=10%"
+                    scrollEnd="bottom center"
+                  >
+                    Project
+                  </ScrollFloat>
+                  <ScrollFloat
+                    containerClassName="!overflow-visible"
+                    textClassName="text-accent font-accent lowercase tracking-normal italic font-normal text-[10vw] lg:text-[clamp(6rem,8vw,10rem)] leading-[0.85]"
+                    scrollStart="top bottom-=10%"
+                    scrollEnd="bottom center"
+                  >
+                    gallery
+                  </ScrollFloat>
+                </div>
                 <div className="flex items-center justify-center gap-2">
                   <span className="h-px w-12 bg-accent/20" />
                   <p className="text-text-muted font-mono text-[9px] uppercase tracking-[0.4em] leading-relaxed">
@@ -519,13 +535,28 @@ export default function Home() {
             <div className="max-w-[1400px] mx-auto relative z-10">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-28">
                 <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: !0 }}
                 >
-                  <h2 className="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
-                    journey <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)]">so far</span>
-                  </h2>
+                  <div className="flex flex-col mb-4">
+                    <ScrollFloat
+                      containerClassName="!overflow-visible"
+                      textClassName="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none"
+                      scrollStart="top bottom-=10%"
+                      scrollEnd="bottom center"
+                    >
+                      journey
+                    </ScrollFloat>
+                    <ScrollFloat
+                      containerClassName="!overflow-visible"
+                      textClassName="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)] leading-none"
+                      scrollStart="top bottom-=10%"
+                      scrollEnd="bottom center"
+                    >
+                      so far
+                    </ScrollFloat>
+                  </div>
                   <div className="w-16 h-px bg-accent/40 mt-10" />
                 </motion.div>
                 <div className="hidden md:block text-right">
@@ -581,13 +612,28 @@ export default function Home() {
             <div className="max-w-[1400px] mx-auto relative z-10">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-28">
                 <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: !0 }}
                 >
-                  <h2 className="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none">
-                    operational <br /> <span className="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)]">stack</span>
-                  </h2>
+                  <div className="flex flex-col mb-4">
+                    <ScrollFloat
+                      containerClassName="!overflow-visible"
+                      textClassName="text-[12vw] md:text-7xl lg:text-[clamp(5rem,7vw,8rem)] font-normal tracking-tighter text-text-primary leading-none"
+                      scrollStart="top bottom-=10%"
+                      scrollEnd="bottom center"
+                    >
+                      operational
+                    </ScrollFloat>
+                    <ScrollFloat
+                      containerClassName="!overflow-visible"
+                      textClassName="font-accent italic text-accent lowercase tracking-normal text-[10vw] md:text-6xl lg:text-[clamp(4rem,6vw,7rem)] leading-none"
+                      scrollStart="top bottom-=10%"
+                      scrollEnd="bottom center"
+                    >
+                      stack
+                    </ScrollFloat>
+                  </div>
                   <div className="w-16 h-px bg-accent/40 mt-10" />
                 </motion.div>
               </div>
