@@ -496,7 +496,7 @@ export default function Home() {
                         <Safari url={proj.liveUrl} className="w-full h-full">
                           {/* Sites that set X-Frame-Options / CSP frame-ancestors block iframes.
                               Show a premium fallback with direct open-in-new-tab for those. */}
-                          {[].includes(proj.slug) ? (
+                          {([] as string[]).includes(proj.slug) ? (
                             <div className="w-full h-full flex flex-col items-center justify-center gap-6 bg-[#0a0a0a] px-8 text-center select-none">
                               {/* Project thumbnail preview */}
                               {proj.imageUrl && (
