@@ -621,8 +621,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* AI Visual Concept Gallery */}
-        <ConceptGallery />
+        {/* AI Visual Concept Gallery - Temporarily Hidden */}
+        {/* <ConceptGallery /> */}
 
         {/* Lower page content wrapper — slides UP and OVER the sticky gallery container */}
         <div className="relative z-20 bg-bg-base border-t border-border-hairline shadow-[0_-20px_50px_rgba(0,0,0,0.12)]">
