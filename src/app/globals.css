@@ -131,3 +131,31 @@ html {
     font-size: clamp(4rem, 6vw, 7rem);
   }
 }
+
+/* Custom cursor and typing animation utilities */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.animate-blink-cursor {
+  animation: blink 1s step-start infinite;
+}
+
+@media (any-hover: hover) and (any-pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+  input,
+  textarea,
+  select,
+  [contenteditable] {
+    cursor: text !important;
+  }
+  a,
+  button,
+  [role="button"],
+  .cursor-pointer {
+    cursor: none !important;
+  }
+}
+

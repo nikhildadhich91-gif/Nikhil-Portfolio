@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import TrueFocus from "@/components/ui/true-focus";
 import ScrollFloat from "@/components/ui/scroll-float";
 import { Safari } from "@/components/ui/safari";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 
 const Lanyard = dynamic(() => import("@/components/ui/lanyard"), { ssr: false });
 
@@ -172,8 +173,24 @@ export default function Home() {
               className="inline-flex items-center gap-2 mb-10 w-fit relative z-[1]"
             >
               <span className="inline-block w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-text-muted">
-                Available for AI & Automation Projects
+              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-text-muted flex items-center gap-1.5 flex-wrap">
+                Available for
+                <TypingAnimation
+                  words={[
+                    "AI & Automation Projects",
+                    "Agentic Workflows",
+                    "RAG Pipelines",
+                    "LLM Integrations",
+                    "Full-Stack Development"
+                  ]}
+                  loop
+                  showCursor={true}
+                  blinkCursor={true}
+                  typeSpeed={60}
+                  deleteSpeed={30}
+                  pauseDelay={2000}
+                  className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent font-bold"
+                />
               </span>
             </motion.div>
 

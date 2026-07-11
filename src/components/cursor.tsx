@@ -1,54 +1,270 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+"use client"
 
-export function SmoothCursor() {
-  const [mounted, setMounted] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+import { FC, useEffect, useRef, useState } from "react"
+import { motion, useSpring } from "framer-motion"
+
+interface Position {
+  x: number
+  y: number
+}
+
+export interface SmoothCursorProps {
+  cursor?: React.ReactNode
+  springConfig?: {
+    damping: number
+    stiffness: number
+    mass: number
+    restDelta: number
+  }
+}
+
+const DESKTOP_POINTER_QUERY = "(any-hover: hover) and (any-pointer: fine)"
+
+function isTrackablePointer(pointerType: string) {
+  return pointerType !== "touch"
+}
+
+const DefaultCursorSVG: FC = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={50}
+      height={54}
+      viewBox="0 0 50 54"
+      fill="none"
+      style={{ scale: 0.5 }}
+    >
+      <g filter="url(#filter0_d_91_7928)">
+        <path
+          d="M42.6817 41.1495L27.5103 6.79925C26.7269 5.02557 24.2082 5.02558 23.3927 6.79925L7.59814 41.1495C6.75833 42.9759 8.52712 44.8902 10.4125 44.1954L24.3757 39.0496C24.8829 38.8627 25.4385 38.8627 25.9422 39.0496L39.8121 44.1954C41.6849 44.8902 43.4884 42.9759 42.6817 41.1495Z"
+          fill="var(--text-primary)"
+        />
+        <path
+          d="M43.7146 40.6933L28.5431 6.34306C27.3556 3.65428 23.5772 3.69516 22.3668 6.32755L6.57226 40.6778C5.3134 43.4156 7.97238 46.298 10.803 45.2549L24.7662 40.109C25.0221 40.0147 25.2999 40.0156 25.5494 40.1082L39.4193 45.254C42.2261 46.2953 44.9254 43.4347 43.7146 40.6933Z"
+          stroke="var(--bg-base)"
+          strokeWidth={2.25825}
+        />
+      </g>
+      <defs>
+        <filter
+          id="filter0_d_91_7928"
+          x={0.602397}
+          y={0.952444}
+          width={49.0584}
+          height={52.428}
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity={0} result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy={2.25825} />
+          <feGaussianBlur stdDeviation={2.25825} />
+          <feComposite in2="hardAlpha" operator="out" />
+          {/* Custom orange glow matching var(--color-accent) */}
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 1 0 0 0 0 0.42 0 0 0 0 0 0 0 0 0.35 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_91_7928"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_91_7928"
+            result="shape"
+          />
+        </filter>
+      </defs>
+    </svg>
+  )
+}
+
+export function SmoothCursor({
+  cursor = <DefaultCursorSVG />,
+  springConfig = {
+    damping: 45,
+    stiffness: 400,
+    mass: 1,
+    restDelta: 0.001,
+  },
+}: SmoothCursorProps) {
+  const lastMousePos = useRef<Position>({ x: 0, y: 0 })
+  const velocity = useRef<Position>({ x: 0, y: 0 })
+  const lastUpdateTime = useRef(Date.now())
+  const previousAngle = useRef(0)
+  const accumulatedRotation = useRef(0)
   
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const [mounted, setMounted] = useState(false)
+  const [isEnabled, setIsEnabled] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
 
-  // Smooth trail spring configuration
-  const springConfig = { damping: 40, stiffness: 450, mass: 0.4 };
-  const cursorX = useSpring(mouseX, springConfig);
-  const cursorY = useSpring(mouseY, springConfig);
+  const cursorX = useSpring(0, springConfig)
+  const cursorY = useSpring(0, springConfig)
+  const rotation = useSpring(0, {
+    ...springConfig,
+    damping: 60,
+    stiffness: 300,
+  })
+  const scale = useSpring(1, {
+    ...springConfig,
+    stiffness: 500,
+    damping: 35,
+  })
 
   useEffect(() => {
-    setMounted(true);
+    setMounted(true)
+    const mediaQuery = window.matchMedia(DESKTOP_POINTER_QUERY)
 
-    const moveCursor = (e: MouseEvent) => {
-      mouseX.set(e.clientX - 8);
-      mouseY.set(e.clientY - 8);
-      if (!isVisible) setIsVisible(true);
-    };
+    const updateEnabled = () => {
+      const nextIsEnabled = mediaQuery.matches
+      setIsEnabled(nextIsEnabled)
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
+      if (!nextIsEnabled) {
+        setIsVisible(false)
+      }
+    }
 
-    window.addEventListener("mousemove", moveCursor);
-    document.addEventListener("mouseleave", handleMouseLeave);
+    updateEnabled()
+    mediaQuery.addEventListener("change", updateEnabled)
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [mouseX, mouseY, isVisible]);
+      mediaQuery.removeEventListener("change", updateEnabled)
+    }
+  }, [])
 
-  if (!mounted) return null;
+  useEffect(() => {
+    if (!isEnabled) {
+      return
+    }
+
+    let timeout: ReturnType<typeof setTimeout> | null = null
+
+    const updateVelocity = (currentPos: Position) => {
+      const currentTime = Date.now()
+      const deltaTime = currentTime - lastUpdateTime.current
+
+      if (deltaTime > 0) {
+        velocity.current = {
+          x: (currentPos.x - lastMousePos.current.x) / deltaTime,
+          y: (currentPos.y - lastMousePos.current.y) / deltaTime,
+        }
+      }
+
+      lastUpdateTime.current = currentTime
+      lastMousePos.current = currentPos
+    }
+
+    const smoothPointerMove = (e: PointerEvent) => {
+      if (!isTrackablePointer(e.pointerType)) {
+        return
+      }
+
+      setIsVisible(true)
+
+      const currentPos = { x: e.clientX, y: e.clientY }
+      updateVelocity(currentPos)
+
+      const speed = Math.sqrt(
+        Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2)
+      )
+
+      cursorX.set(currentPos.x)
+      cursorY.set(currentPos.y)
+
+      const target = e.target as HTMLElement | null
+      const hovering = target ? !!target.closest('a, button, [role="button"], input, select, textarea, .cursor-pointer') : false
+
+      if (speed > 0.1) {
+        const currentAngle =
+          Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) +
+          90
+
+        let angleDiff = currentAngle - previousAngle.current
+        if (angleDiff > 180) angleDiff -= 360
+        if (angleDiff < -180) angleDiff += 360
+        accumulatedRotation.current += angleDiff
+        rotation.set(accumulatedRotation.current)
+        previousAngle.current = currentAngle
+
+        scale.set(hovering ? 1.35 : 0.92)
+
+        if (timeout !== null) {
+          clearTimeout(timeout)
+        }
+
+        timeout = setTimeout(() => {
+          scale.set(hovering ? 1.45 : 1.0)
+        }, 150)
+      } else {
+        scale.set(hovering ? 1.45 : 1.0)
+      }
+    }
+
+    let rafId = 0
+    const throttledPointerMove = (e: PointerEvent) => {
+      if (!isTrackablePointer(e.pointerType)) {
+        return
+      }
+
+      if (rafId) return
+
+      rafId = requestAnimationFrame(() => {
+        smoothPointerMove(e)
+        rafId = 0
+      })
+    }
+
+    document.body.style.cursor = "none"
+    window.addEventListener("pointermove", throttledPointerMove, {
+      passive: true,
+    })
+
+    return () => {
+      window.removeEventListener("pointermove", throttledPointerMove)
+      document.body.style.cursor = "auto"
+      if (rafId) cancelAnimationFrame(rafId)
+      if (timeout !== null) {
+        clearTimeout(timeout)
+      }
+    }
+  }, [cursorX, cursorY, rotation, scale, isEnabled])
+
+  if (!mounted || !isEnabled) {
+    return null
+  }
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] h-4 w-4 rounded-full bg-text-primary mix-blend-difference hidden md:block"
       style={{
-        x: cursorX,
-        y: cursorY,
+        position: "fixed",
+        left: cursorX,
+        top: cursorY,
+        translateX: "-50%",
+        translateY: "-50%",
+        rotate: rotation,
+        scale: scale,
+        zIndex: 99999, // Ensure it's above all page content
+        pointerEvents: "none",
+        willChange: "transform",
         opacity: isVisible ? 1 : 0,
       }}
-      transition={{ opacity: { duration: 0.15 } }}
-    />
-  );
+      initial={false}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{
+        opacity: { duration: 0.15 },
+      }}
+    >
+      {cursor}
+    </motion.div>
+  )
 }
 
 export function SiteCursor() {
@@ -58,5 +274,5 @@ export function SiteCursor() {
       <span className="block md:hidden sr-only">SmoothCursor disabled on touch devices</span>
       <SmoothCursor />
     </>
-  );
+  )
 }
