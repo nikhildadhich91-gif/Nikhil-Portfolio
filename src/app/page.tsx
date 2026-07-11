@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { PROJECTS_DATA } from "../lib/projects-data";
 import { PageLoader } from "@/components/page-loader";
-import { ConceptGallery } from "@/components/ui/concept-gallery";
+// import { ConceptGallery } from "@/components/ui/concept-gallery";
 import { Footer } from "@/components/ui/footer";
 import { MovingCircle } from "../components/moving-circle";
 import dynamic from "next/dynamic";
